@@ -1,0 +1,551 @@
+<!-- Enhanced Join Form Modal - Separate Component -->
+<style>
+  .enhanced-join-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 10001;
+    backdrop-filter: blur(8px);
+    animation: fadeInModal 0.3s ease;
+  }
+
+  .enhanced-join-modal.active {
+    display: flex;
+  }
+
+  @keyframes fadeInModal {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .enhanced-join-container {
+    background: linear-gradient(145deg, #0f1a2e, #0a1222);
+    border-radius: 32px;
+    max-width: 550px;
+    width: 90%;
+    padding: 2.5rem;
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6), 0 0 40px rgba(0, 255, 255, 0.15);
+    animation: slideUpForm 0.35s ease;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+  }
+
+  @keyframes slideUpForm {
+    from { 
+      opacity: 0;
+      transform: translateY(50px);
+    }
+    to { 
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .enhanced-join-container h2 {
+    color: #0ff;
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+    text-align: center;
+    font-weight: 700;
+  }
+
+  .form-subtitle {
+    text-align: center;
+    color: #ffb347;
+    margin-bottom: 1.8rem;
+    font-size: 0.9rem;
+  }
+
+  .close-form-btn {
+    position: absolute;
+    top: 1.2rem;
+    right: 1.2rem;
+    background: rgba(255, 140, 66, 0.2);
+    border: 1px solid #ff8c42;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    font-size: 24px;
+    color: #ff8c42;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+  }
+
+  .close-form-btn:hover {
+    background: rgba(255, 140, 66, 0.4);
+    transform: rotate(90deg);
+  }
+
+  .form-group {
+    margin-bottom: 1.3rem;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .form-group label {
+    display: block;
+    color: #ffb347;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: rgba(15, 30, 60, 0.6);
+    border: 1px solid rgba(0, 255, 255, 0.4);
+    border-radius: 12px;
+    color: #f0f3ff;
+    font-family: inherit;
+    font-size: 0.95rem;
+    transition: all 0.2s;
+  }
+
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    outline: none;
+    background: rgba(15, 30, 60, 0.9);
+    border-color: #0ff;
+    box-shadow: 0 0 12px rgba(0, 255, 255, 0.3);
+  }
+
+  .form-group textarea {
+    resize: vertical;
+  }
+
+  .form-submit-btn {
+    width: 100%;
+    background: linear-gradient(95deg, #ff8c42, #ff4d00);
+    border: none;
+    padding: 1rem;
+    border-radius: 12px;
+    color: white;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 8px 20px rgba(255, 140, 66, 0.3);
+    font-family: inherit;
+    margin-top: 0.5rem;
+  }
+
+  .form-submit-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(255, 140, 66, 0.5);
+    background: linear-gradient(95deg, #ff9e5e, #ff6010);
+  }
+
+  .form-submit-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .form-submit-btn.loading {
+    position: relative;
+    color: transparent;
+  }
+
+  .form-submit-btn.loading::after {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 50%;
+    left: 50%;
+    margin-left: -10px;
+    margin-top: -10px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* Success Message Toast */
+  .success-toast {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: linear-gradient(135deg, #00c853, #00e676);
+    color: white;
+    padding: 1rem 1.8rem;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 1rem;
+    z-index: 10002;
+    animation: slideInRight 0.3s ease, fadeOut 0.5s ease 3s forwards;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  @keyframes slideInRight {
+    from {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes fadeOut {
+    to {
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .enhanced-join-container {
+      padding: 2rem 1.5rem;
+      border-radius: 24px;
+    }
+
+    .enhanced-join-container h2 {
+      font-size: 1.5rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .form-subtitle {
+      font-size: 0.8rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .form-row {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      padding: 0.65rem 0.9rem;
+      font-size: 0.9rem;
+    }
+
+    .success-toast {
+      bottom: 20px;
+      right: 20px;
+      left: 20px;
+      text-align: center;
+      justify-content: center;
+    }
+  }
+
+  .enhanced-join-container::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .enhanced-join-container::-webkit-scrollbar-track {
+    background: rgba(0, 255, 255, 0.1);
+    border-radius: 10px;
+  }
+
+  .enhanced-join-container::-webkit-scrollbar-thumb {
+    background: rgba(0, 255, 255, 0.4);
+    border-radius: 10px;
+  }
+
+  .enhanced-join-container::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 255, 255, 0.6);
+  }
+</style>
+
+<!-- Modal Structure -->
+<div id="enhancedJoinModal" class="enhanced-join-modal">
+  <div class="enhanced-join-container">
+    <button class="close-form-btn" id="enhancedCloseFormBtn">&times;</button>
+    <h2>🎓 কোর্সে যোগ দিন</h2>
+    <div class="form-subtitle">আপনার তথ্য দিন, আমরা শীঘ্রই যোগাযোগ করবো</div>
+    
+    <form id="enhancedJoinFormElement" method="POST" action="{% url 'users:app_form' %}">
+      {% csrf_token %}
+      
+      <div class="form-group">
+        <label for="enhancedFullName">পূর্ণ নাম *</label>
+        <input type="text" id="enhancedFullName" name="full_name" placeholder="আপনার নাম লিখুন" required>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="enhancedAge">বয়স *</label>
+          <input type="number" id="enhancedAge" name="age" min="5" max="100" placeholder="বয়স" required>
+        </div>
+        <div class="form-group">
+        <label for="enhancedPhone">ফোন নাম্বার *</label>
+        <input type="tel" 
+            id="enhancedPhone" 
+            name="phone_number" 
+            placeholder="+8801712345678 or 01712345678" 
+            required>
+        <small style="display: block; color: #aac8ff; font-size: 0.8rem; margin-top: 5px;">
+            📞 দেশের কোড সহ ফোন নাম্বার দিন (যেমন: +8801712345678 অথবা 01712345678)
+        </small>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="enhancedEmail">ইমেইল *</label>
+        <input type="email" id="enhancedEmail" name="email" placeholder="your@email.com" required>
+      </div>
+
+      <div class="form-group">
+        <label for="enhancedQualification">শিক্ষাগত যোগ্যতা *</label>
+        <select id="enhancedQualification" name="educational_qualification" required>
+          <option value="">নির্বাচন করুন</option>
+          <option value="SSC">এসএসিি</option>
+          <option value="HSC">এইচএসসি</option>
+          <option value="Bachelor">স্নাতক</option>
+          <option value="Masters">স্নাতকোত্তর</option>
+          <option value="Other">অন্যান্য</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="enhancedExperience">প্রোগ্রামিং অভিজ্ঞতা</label>
+        <select id="enhancedExperience" name="programming_experience">
+          <option value="Beginner">শুরু করছি</option>
+          <option value="Intermediate">মধ্যম</option>
+          <option value="Advanced">উন্নত</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="enhancedMessage">বার্তা বা প্রশ্ন</label>
+        <textarea id="enhancedMessage" name="message" placeholder="আপনার কোনো প্রশ্ন থাকলে লিখুন..." rows="3"></textarea>
+      </div>
+
+      <button type="submit" class="form-submit-btn" id="enhancedFormSubmitBtn">যোগ দিন এবং সংরক্ষণ করুন</button>
+    </form>
+  </div>
+</div>
+
+<script>
+(function() {
+  // Wait for DOM to be fully loaded
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initForm);
+  } else {
+    initForm();
+  }
+
+  function initForm() {
+    // Get elements
+    const joinNowBtn = document.getElementById('joinNowBtn');
+    const modal = document.getElementById('enhancedJoinModal');
+    const closeBtn = document.getElementById('enhancedCloseFormBtn');
+    const form = document.getElementById('enhancedJoinFormElement');
+    const submitBtn = document.getElementById('enhancedFormSubmitBtn');
+    
+    // Function to show success message
+    function showSuccessMessage() {
+      // Remove any existing toast
+      const existingToast = document.querySelector('.success-toast');
+      if (existingToast) existingToast.remove();
+      
+      // Create toast message
+      const toast = document.createElement('div');
+      toast.className = 'success-toast';
+      toast.innerHTML = `
+        <span style="font-size: 24px;">✅</span>
+        <span style="flex: 1;">আপনার তথ্য সফলভাবে জমা হয়েছে!<br>আমরা খুব শীঘ্রই আপনার সাথে যোগাযোগ করবো।</span>
+      `;
+      document.body.appendChild(toast);
+      
+      // Remove toast after animation
+      setTimeout(() => {
+        if (toast && toast.remove) {
+          toast.remove();
+        }
+      }, 3500);
+    }
+    
+    // Function to close modal
+    function closeModal() {
+      if (modal) {
+        modal.classList.remove('active');
+        // Reset form
+        if (form) {
+          form.reset();
+        }
+      }
+    }
+    
+    // Function to open modal
+    function openModal(e) {
+      if (e) e.preventDefault();
+      if (modal) {
+        modal.classList.add('active');
+      }
+    }
+    
+    // Handle join button click - open modal directly
+    if (joinNowBtn) {
+      // Clone and replace to remove any existing event listeners
+      const newJoinBtn = joinNowBtn.cloneNode(true);
+      joinNowBtn.parentNode.replaceChild(newJoinBtn, joinNowBtn);
+      
+      newJoinBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        openModal(e);
+      });
+    }
+    
+    // Handle close button
+    if (closeBtn) {
+      closeBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        closeModal();
+      });
+    }
+    
+    // Handle clicking outside modal to close
+    if (modal) {
+      modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+          closeModal();
+        }
+      });
+    }
+    
+    // Handle ESC key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && modal && modal.classList.contains('active')) {
+        closeModal();
+      }
+    });
+    
+    // Handle form submission
+    // Handle form submission
+    if (form) {
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        // Get form values
+        const fullName = document.getElementById('enhancedFullName').value.trim();
+        const age = document.getElementById('enhancedAge').value;
+        const phone = document.getElementById('enhancedPhone').value.trim();
+        const email = document.getElementById('enhancedEmail').value;
+        const qualification = document.getElementById('enhancedQualification').value;
+        
+        // Validate name
+        if (fullName.length < 2) {
+        alert('দয়া করে আপনার পূর্ণ নাম লিখুন (অন্তত ২ অক্ষর)');
+        document.getElementById('enhancedFullName').focus();
+        return false;
+        }
+        
+        // Validate age
+        if (!age || age < 5 || age > 100) {
+        alert('দয়া করে সঠিক বয়স দিন (৫-১০০ বছর)');
+        document.getElementById('enhancedAge').focus();
+        return false;
+        }
+        
+        // Validate phone number - Accept any format, just ensure it's not empty
+        if (!phone || phone.length < 5) {
+        alert('দয়া করে সঠিক ফোন নাম্বার দিন (অন্তত ৫ অক্ষর)');
+        document.getElementById('enhancedPhone').focus();
+        return false;
+        }
+        
+        // Optional: Basic phone number validation (allow digits, +, -, spaces, parentheses)
+        const phoneRegex = /^[+\-\s\d()]+$/;
+        if (!phoneRegex.test(phone)) {
+        alert('ফোন নাম্বারে শুধুমাত্র সংখ্যা, +, -, (), এবং স্পেস ব্যবহার করতে পারেন');
+        document.getElementById('enhancedPhone').focus();
+        return false;
+        }
+        
+        // Validate email
+        const emailRegex = /^[^\s@]+@([^\s@]+\.)+[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+        alert('দয়া করে একটি বৈধ ইমেইল ঠিকানা দিন (যেমন: example@gmail.com)');
+        document.getElementById('enhancedEmail').focus();
+        return false;
+        }
+        
+        // Validate qualification
+        if (!qualification) {
+        alert('দয়া করে আপনার শিক্ষাগত যোগ্যতা নির্বাচন করুন');
+        document.getElementById('enhancedQualification').focus();
+        return false;
+        }
+        
+        // Show loading state
+        if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.classList.add('loading');
+        }
+        
+        try {
+        // Create FormData object
+        const formData = new FormData(form);
+        
+        // Send AJAX request
+        const response = await fetch(form.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+            }
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok && data.success) {
+            // Show success message
+            showSuccessMessage();
+            
+            // Close modal
+            closeModal();
+            
+            // Reset form
+            form.reset();
+        } else {
+            // Show error message from server
+            const errorMsg = data.message || 'দুঃখিত, কিছু সমস্যা হয়েছে। আবার চেষ্টা করুন।';
+            alert(errorMsg);
+        }
+        } catch (error) {
+        console.error('Form submission error:', error);
+        alert('নেটওয়ার্ক সমস্যার কারণে জমা দেওয়া যায়নি।\nইন্টারনেট সংযোগ চেক করে আবার চেষ্টা করুন।');
+        } finally {
+        // Remove loading state
+        if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.classList.remove('loading');
+        }
+        }
+    });
+    }
+  }
+})();
+</script>

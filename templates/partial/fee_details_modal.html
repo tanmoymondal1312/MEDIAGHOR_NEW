@@ -1,0 +1,438 @@
+<!-- Fee Details Modal Component -->
+<style>
+  .fee-details-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 10003;
+    backdrop-filter: blur(8px);
+    animation: fadeInModal 0.3s ease;
+  }
+
+  .fee-details-modal.active {
+    display: flex;
+  }
+
+  .fee-details-container {
+    background: linear-gradient(145deg, #0f1a2e, #0a1222);
+    border-radius: 32px;
+    max-width: 700px;
+    width: 90%;
+    padding: 2.5rem;
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6), 0 0 40px rgba(0, 255, 255, 0.15);
+    animation: slideUpForm 0.35s ease;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+  }
+
+  .fee-details-container h2 {
+    color: #0ff;
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+    text-align: center;
+    font-weight: 700;
+  }
+
+  .fee-details-subtitle {
+    text-align: center;
+    color: #ffb347;
+    margin-bottom: 2rem;
+    font-size: 0.95rem;
+  }
+
+  .close-fee-modal-btn {
+    position: absolute;
+    top: 1.2rem;
+    right: 1.2rem;
+    background: rgba(255, 140, 66, 0.2);
+    border: 1px solid #ff8c42;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    font-size: 24px;
+    color: #ff8c42;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+  }
+
+  .close-fee-modal-btn:hover {
+    background: rgba(255, 140, 66, 0.4);
+    transform: rotate(90deg);
+  }
+
+  .payment-options {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+  }
+
+  .payment-card {
+    background: rgba(15, 30, 60, 0.4);
+    border-radius: 24px;
+    padding: 1.5rem;
+    border: 2px solid rgba(0, 255, 255, 0.2);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .payment-card:hover {
+    border-color: #0ff;
+    transform: translateX(5px);
+    background: rgba(15, 30, 60, 0.6);
+  }
+
+  .payment-card.recommended {
+    border-color: #ff8c42;
+    background: linear-gradient(135deg, rgba(255, 140, 66, 0.1), rgba(0, 255, 255, 0.05));
+  }
+
+  .recommended-badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: linear-gradient(135deg, #ff8c42, #ff4d00);
+    padding: 0.3rem 1rem;
+    border-radius: 0 20px 0 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: white;
+  }
+
+  .payment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .payment-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #ffb347;
+  }
+
+  .payment-price {
+    font-size: 1.8rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #0ff, #ff8c42);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .payment-details {
+    color: #ccd9ff;
+    line-height: 1.6;
+    margin: 1rem 0;
+  }
+
+  .payment-details ul {
+    margin: 0.5rem 0 0 1.5rem;
+  }
+
+  .payment-details li {
+    margin: 0.5rem 0;
+  }
+
+  .discount-tag {
+    display: inline-block;
+    background: rgba(0, 255, 0, 0.2);
+    color: #0f0;
+    padding: 0.2rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    margin-left: 0.5rem;
+  }
+
+  .saving-info {
+    background: rgba(0, 255, 255, 0.1);
+    border-left: 3px solid #0ff;
+    padding: 1rem;
+    border-radius: 12px;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+  }
+
+  .payment-methods {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(0, 255, 255, 0.2);
+  }
+
+  .payment-methods h4 {
+    color: #ffb347;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+  }
+
+  .method-icons {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .method-icon {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.5rem 1rem;
+    border-radius: 40px;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .fee-action-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .fee-action-btn {
+    background: linear-gradient(95deg, #ff8c42, #ff4d00);
+    border: none;
+    padding: 0.8rem 1.8rem;
+    border-radius: 40px;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-family: inherit;
+  }
+
+  .fee-action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 140, 66, 0.4);
+  }
+
+  .fee-action-btn.secondary {
+    background: transparent;
+    border: 2px solid #ff8c42;
+    color: #ffb347;
+  }
+
+  .fee-action-btn.secondary:hover {
+    background: rgba(255, 140, 66, 0.2);
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 600px) {
+    .fee-details-container {
+      padding: 2rem 1.5rem;
+    }
+
+    .payment-title {
+      font-size: 1.2rem;
+    }
+
+    .payment-price {
+      font-size: 1.4rem;
+    }
+
+    .payment-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>
+
+<div id="feeDetailsModal" class="fee-details-modal">
+  <div class="fee-details-container">
+    <button class="close-fee-modal-btn" id="closeFeeModalBtn">&times;</button>
+    <h2>💰 কোর্স ফি এবং পেমেন্ট অপশন</h2>
+    <div class="fee-details-subtitle">আপনার সুবিধামতো পেমেন্ট প্ল্যান বেছে নিন</div>
+
+    <div class="payment-options">
+      <!-- Monthly Payment Option -->
+      <div class="payment-card">
+        <div class="payment-header">
+          <span class="payment-title">📅 মাসিক পেমেন্ট</span>
+          <span class="payment-price">৩,০০০ টাকা</span>
+        </div>
+        <div class="payment-details">
+          <p>✅ প্রতি মাসে ৩,০০০ টাকা করে পেমেন্ট করুন</p>
+          <p>✅ ৬ মাসের মেয়াদে মোট খরচ: <strong>১৮,০০০ টাকা</strong></p>
+          <p>✅ সুবিধা: মাসিক পেমেন্টের সুবিধা, যেকোনো মাসে চাইলে বন্ধ করতে পারেন</p>
+          <ul>
+            <li>লাইভ ক্লাসে অংশগ্রহণ</li>
+            <li>সমস্ত রেকর্ডিং অ্যাক্সেস</li>
+            <li>প্রজেক্ট রিভিউ এবং সাপোর্ট</li>
+            <li>ক্যারিয়ার কাউন্সেলিং</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 6 Months Advance Payment with Discount -->
+      <div class="payment-card recommended">
+        <div class="recommended-badge">✨ সেরা অফার ✨</div>
+        <div class="payment-header">
+          <span class="payment-title">🎯 ৬ মাস অগ্রিম পেমেন্ট</span>
+          <span class="payment-price">১৫,০০০ টাকা</span>
+        </div>
+        <div class="payment-details">
+          <p>✅ একবারে ৬ মাসের পুরো ফি পরিশোধ করুন</p>
+          <p>✅ <strong>৩,০০০ টাকা ডিসকাউন্ট</strong> <span class="discount-tag">সাশ্রয় ২,০০০ টাকা নয়, আসলে ৩,০০০ টাকা!</span></p>
+          <p>✅ নিয়মিত মাসিক পেমেন্টে ৬ মাসে খরচ: <del>১৮,০০০ টাকা</del></p>
+          <p>✅ অগ্রিম পেমেন্টে খরচ: <strong>১৫,০০০ টাকা</strong></p>
+          <p>✅ আপনার <strong>সাশ্রয়: ৩,০০০ টাকা</strong> (১৮,০০০ - ১৫,০০০ = ৩,০০০)</p>
+          
+          <div class="saving-info">
+            💡 <strong>বিশেষ সুবিধা:</strong> অগ্রিম পেমেন্টে আপনি পাচ্ছেন:
+            <ul style="margin-top: 5px;">
+              <li>🎁 ফ্রি এক্সট্রা প্রজেক্ট সাপোর্ট</li>
+              <li>🎁 প্রাইভেট মেন্টরশিপ সেশন</li>
+              <li>🎁 কোর্স শেষে প্রিমিয়াম সার্টিফিকেট</li>
+              <li>🎁 জব প্লেসমেন্ট সাপোর্ট</li>
+            </ul>
+          </div>
+          
+          <ul>
+            <li>সকল মাসিক পেমেন্টের সুবিধা + এক্সট্রা বেনিফিট</li>
+            <li>টেনশন ফ্রি - পুরো ৬ মাসের জন্য নিশ্চিত সিট</li>
+            <li>প্রাথমিক সিট বুকিং গ্যারান্টি</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Payment Methods -->
+      <div class="payment-methods">
+        <h4>📱 পেমেন্ট মাধ্যম</h4>
+        <div class="method-icons">
+          <div class="method-icon">🏦 ব্যাংক ট্রান্সফার</div>
+          <div class="method-icon">📱 বিকাশ</div>
+          <div class="method-icon">💳 নগদ</div>
+          <div class="method-icon">🔵 রকেট</div>
+          <div class="method-icon">💵 ক্যাশ পেমেন্ট</div>
+        </div>
+        <p style="text-align: center; margin-top: 1rem; font-size: 0.85rem; color: #aac8ff;">
+          ⚡ পেমেন্ট করার পর আমাদের সাথে যোগাযোগ করুন: 01736008374 (WhatsApp/কল)
+        </p>
+      </div>
+    </div>
+
+    <div class="fee-action-buttons">
+      <button class="fee-action-btn" id="enrollFromFeeBtn">🎓 এখনই এনরোল করুন</button>
+      <button class="fee-action-btn secondary" id="contactFromFeeBtn">📞 যোগাযোগ করুন</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  // Wait for DOM to be fully loaded
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initFeeModal);
+  } else {
+    initFeeModal();
+  }
+
+  function initFeeModal() {
+    const feeBtn = document.getElementById('feeEnrollBtn');
+    const feeModal = document.getElementById('feeDetailsModal');
+    const closeFeeBtn = document.getElementById('closeFeeModalBtn');
+    const enrollFromFeeBtn = document.getElementById('enrollFromFeeBtn');
+    const contactFromFeeBtn = document.getElementById('contactFromFeeBtn');
+    
+    // Function to open fee modal
+    function openFeeModal(e) {
+      if (e) e.preventDefault();
+      if (feeModal) {
+        feeModal.classList.add('active');
+      }
+    }
+    
+    // Function to close fee modal
+    function closeFeeModal() {
+      if (feeModal) {
+        feeModal.classList.remove('active');
+      }
+    }
+    
+    // Handle fee button click
+    if (feeBtn) {
+      // Clone and replace to remove existing listeners
+      const newFeeBtn = feeBtn.cloneNode(true);
+      feeBtn.parentNode.replaceChild(newFeeBtn, feeBtn);
+      
+      newFeeBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        openFeeModal(e);
+      });
+    }
+    
+    // Close button
+    if (closeFeeBtn) {
+      closeFeeBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        closeFeeModal();
+      });
+    }
+    
+    // Close when clicking outside
+    if (feeModal) {
+      feeModal.addEventListener('click', function(e) {
+        if (e.target === feeModal) {
+          closeFeeModal();
+        }
+      });
+    }
+    
+    // Handle ESC key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && feeModal && feeModal.classList.contains('active')) {
+        closeFeeModal();
+      }
+    });
+    
+    // Handle enroll button from fee modal
+    if (enrollFromFeeBtn) {
+      enrollFromFeeBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        closeFeeModal();
+        
+        // Open the enrollment form modal
+        const joinModal = document.getElementById('enhancedJoinModal');
+        if (joinModal) {
+          setTimeout(() => {
+            joinModal.classList.add('active');
+          }, 300);
+        } else {
+          // Fallback - show alert
+          alert('🎉 এনরোল করতে ফর্মটি পূরণ করুন। আমাদের সাথে যোগাযোগ করুন: 01736008374');
+        }
+      });
+    }
+    
+    // Handle contact button from fee modal
+    if (contactFromFeeBtn) {
+      contactFromFeeBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        closeFeeModal();
+        
+        // Show contact options
+        alert('📞 যোগাযোগ করুন:\n\n📱 ফোন/WhatsApp: 01736008374\n✉️ ইমেইল: tanmoymondal1315@gmail.com\n\nআমরা আপনার প্রশ্নের উত্তর দিতে ২৪/৭ প্রস্তুত!');
+      });
+    }
+  }
+})();
+</script>

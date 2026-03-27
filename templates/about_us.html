@@ -1,0 +1,673 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>About Us | Media Ghor</title>
+
+  <link rel="icon" type="image/png" href="{% static 'images/favicon/favicon-96x96.png' %}" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="{% static 'images/favicon/favicon.svg' %}" />
+  <link rel="shortcut icon" href="{% static 'images/favicon/favicon.ico' %}" />
+  <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/favicon/apple-touch-icon.png' %}" />
+  <meta name="apple-mobile-web-app-title" content="Media Ghor" />
+  <link rel="manifest" href="{% static 'images/favicon/site.webmanifest' %}"/>
+
+  <meta name="description" content="Media Ghor - Python, Django ওয়েব ডেভেলপমেন্ট এবং ফ্রিল্যান্সিং শেখার সম্পূর্ণ বাংলা প্ল্যাটফর্ম। প্রিমিয়াম কোর্স, ফ্রি রিসোর্স, লাইভ সাপোর্ট।">
+  <meta name="keywords" content="Media Ghor about, Python Bangla course, Django course Bangladesh, Python free resources, Media Ghor YouTube, মিডিয়া ঘর সম্পর্কে, পাইথন কোর্স">
+  <meta name="author" content="Media Ghor">
+  <meta property="og:title" content="Media Ghor - Python দিয়ে বাস্তব সমস্যার সমাধান শিখুন">
+  <meta property="og:description" content="বাংলায় পাইথন, জ্যাঙ্গো, ওয়েব ডেভেলপমেন্ট কোর্স ও ফ্রি রিসোর্স। আজই ক্যারিয়ার শুরু করুন।">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="bn_BD">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', 'Hind Siliguri', 'Noto Sans Bengali', system-ui, -apple-system, sans-serif;
+      background: #f8fafc;
+      color: #0f172a;
+      scroll-behavior: smooth;
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #e2e8f0;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #f97316;
+      border-radius: 12px;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    /* Hero Section */
+    .about-hero {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+      padding: 5rem 0 4rem;
+      position: relative;
+      overflow: hidden;
+      margin-top: 0;
+    }
+    .about-hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 20% 30%, rgba(249,115,22,0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .about-title {
+      font-size: 3.2rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #f97316, #facc15, #3b82f6);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 1rem;
+      text-align: center;
+      letter-spacing: -0.02em;
+    }
+    .about-sub {
+      text-align: center;
+      color: #cbd5e1;
+      font-size: 1.2rem;
+      max-width: 750px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* Featured Course Banner - HIGH PRIORITY */
+    .course-highlight {
+      background: linear-gradient(115deg, #ffedd5, #fed7aa, #ffedd5);
+      border-radius: 2rem;
+      margin: 2.5rem 0 2rem;
+      padding: 2rem;
+      border: 1px solid #fdba74;
+      box-shadow: 0 20px 35px -12px rgba(249,115,22,0.2);
+      transition: all 0.3s ease;
+    }
+    .course-highlight:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 25px 40px -12px rgba(249,115,22,0.3);
+    }
+    .highlight-badge {
+      display: inline-block;
+      background: #f97316;
+      color: white;
+      padding: 0.3rem 1rem;
+      border-radius: 40px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      letter-spacing: 0.5px;
+    }
+    .course-highlight h2 {
+      font-size: 1.9rem;
+      color: #0c4a6e;
+      margin-bottom: 0.5rem;
+    }
+    .course-highlight p {
+      color: #1e293b;
+    }
+    .course-highlight .course-price {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: #f97316;
+      margin: 0.5rem 0;
+    }
+    .course-features {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin: 1.2rem 0;
+    }
+    .course-features span {
+      background: white;
+      padding: 0.3rem 1rem;
+      border-radius: 30px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #1e293b;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .btn-glow {
+      background: linear-gradient(95deg, #f97316, #ea580c);
+      border: none;
+      padding: 0.9rem 2rem;
+      font-size: 1rem;
+      font-weight: 700;
+      border-radius: 60px;
+      color: white;
+      cursor: pointer;
+      transition: all 0.25s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 6px 14px #f9731680;
+      font-family: inherit;
+    }
+    .btn-glow:hover {
+      transform: scale(1.02);
+      box-shadow: 0 12px 22px #f97316aa;
+    }
+
+    /* Free Resources Section */
+    .free-resources-section {
+      background: linear-gradient(145deg, #ffffff, #fef9f0);
+      border-radius: 2rem;
+      padding: 2rem;
+      margin: 2rem 0;
+      border: 1px solid #ffe2c4;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.03);
+    }
+    .free-resources-section p {
+      color: #1e293b;
+    }
+    .section-icon-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 1.5rem;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+    .resources-flex {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.2rem;
+      justify-content: space-between;
+    }
+    .resource-item {
+      background: #f1f5f9;
+      padding: 1rem 1.4rem;
+      border-radius: 60px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: 0.2s;
+      flex: 1 1 auto;
+      min-width: 180px;
+      border: 1px solid #e2e8f0;
+      cursor: pointer;
+    }
+    .resource-item i {
+      font-size: 1.4rem;
+      color: #f97316;
+    }
+    .resource-item span {
+      font-weight: 600;
+      color: #1e293b;
+    }
+    .resource-item:hover {
+      background: #f97316;
+      color: white;
+      transform: translateY(-3px);
+    }
+    .resource-item:hover i, .resource-item:hover span {
+      color: white;
+    }
+
+    /* Grid Layouts */
+    .grid-2col {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+    .info-card {
+      background: white;
+      border-radius: 2rem;
+      padding: 2rem;
+      flex: 1;
+      min-width: 260px;
+      transition: all 0.3s ease;
+      border: 1px solid #eef2ff;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+    }
+    .info-card:hover {
+      transform: translateY(-6px);
+      border-color: #fed7aa;
+      box-shadow: 0 20px 30px -12px rgba(249,115,22,0.15);
+    }
+    .card-icon {
+      font-size: 2.8rem;
+      margin-bottom: 1rem;
+    }
+    .info-card h3 {
+      font-size: 1.6rem;
+      color: #f97316;
+      margin-bottom: 1rem;
+    }
+    .info-card p {
+      color: #1e293b;
+      line-height: 1.5;
+    }
+    .info-card ul {
+      list-style: none;
+      padding-left: 0;
+    }
+    .info-card li {
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.7rem;
+      color: #1e293b;
+      line-height: 1.4;
+    }
+    .info-card li i, .info-card li strong {
+      color: #1e293b;
+    }
+    .badge {
+      background: #fef3c7;
+      padding: 0.2rem 0.8rem;
+      border-radius: 30px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #c2410c;
+      display: inline-block;
+      margin-top: 0.8rem;
+    }
+    /* Custom bullet for lists without pseudo conflict */
+    .info-card li::before {
+      content: "✓";
+      color: #f97316;
+      font-weight: bold;
+      margin-right: 0.3rem;
+    }
+
+    /* YouTube Highlight */
+    .youtube-highlight {
+      background: linear-gradient(125deg, #0f172a, #1e1b4b);
+      border-radius: 2rem;
+      margin: 2rem 0;
+      padding: 2.5rem;
+      text-align: center;
+      color: white;
+    }
+    .youtube-highlight p {
+      color: #e2e8f0;
+    }
+    .btn-youtube {
+      background: #ff0000;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 60px;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 1rem;
+      transition: 0.2s;
+      color: white;
+    }
+    .btn-youtube:hover {
+      transform: scale(1.02);
+      background: #e60000;
+    }
+
+    /* Journey Stats */
+    .journey-stats {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      gap: 1.5rem;
+      background: #ffffff;
+      border-radius: 2rem;
+      padding: 2rem;
+      margin: 2rem 0;
+      border: 1px solid #e2e8f0;
+    }
+    .stat-item {
+      text-align: center;
+      color: #1e293b;
+    }
+    .stat-number {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: #f97316;
+    }
+
+    .section-title {
+      font-size: 2rem;
+      margin: 2rem 0 1rem 0;
+      font-weight: 700;
+      background: linear-gradient(120deg, #f97316, #facc15);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      display: inline-block;
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 2px solid #f97316;
+      padding: 0.6rem 1.5rem;
+      border-radius: 40px;
+      color: #f97316;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s;
+      font-family: inherit;
+    }
+    .btn-outline:hover {
+      background: #f97316;
+      color: white;
+    }
+
+    /* Why Choose Us section - ensure text visibility */
+    .why-choose-box {
+      background: #ffffff;
+      border-radius: 2rem;
+      padding: 2rem;
+      margin: 2rem 0;
+      border: 1px solid #ffe2c4;
+    }
+    .why-choose-box h3 {
+      font-size: 1.8rem;
+      color: #0f172a;
+    }
+    .feature-item {
+      flex: 1;
+      min-width: 180px;
+      color: #1e293b;
+      font-weight: 500;
+    }
+    .feature-item i {
+      color: #f97316;
+      margin-right: 0.5rem;
+    }
+
+    /* Contact final section */
+    .contact-final {
+      text-align: center;
+      margin: 3rem 0 4rem;
+      background: #0f172a;
+      border-radius: 2rem;
+      padding: 2.5rem;
+      color: white;
+    }
+    .contact-final p {
+      color: #cbd5e1;
+    }
+
+    @media (max-width: 680px) {
+      .about-title { font-size: 2rem; }
+      .container { padding: 0 1.2rem; }
+      .course-highlight h2 { font-size: 1.4rem; }
+      .course-price { font-size: 1.6rem; }
+      .section-icon-title { font-size: 1.4rem; }
+      .info-card h3 { font-size: 1.3rem; }
+    }
+    @keyframes fadeSlide {
+      from { opacity: 0; transform: translateY(20px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
+    .info-card, .course-highlight, .free-resources-section, .youtube-highlight {
+      animation: fadeSlide 0.5s ease-out;
+    }
+  </style>
+</head>
+<body>
+
+{% include 'partial/navbar.html' %}
+
+<main>
+  <!-- Hero Section -->
+  <div class="about-hero">
+    <div class="container" style="text-align: center;">
+      <h1 class="about-title">📖 Media Ghor: বাংলায় প্রযুক্তি শিক্ষার নতুন দিগন্ত</h1>
+      <p class="about-sub">Python দিয়ে বাস্তব সমস্যার সমাধান — বিনামূল্যে YouTube শিক্ষা থেকে প্রিমিয়াম কোর্স, ফ্রি রিসোর্স লাইব্রেরি, লাইভ মেন্টরশিপ। আমাদের লক্ষ্য তৈরি করা ১০,০০০+ স্বনির্ভর ডেভেলপার।</p>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- HIGH PRIORITY: PYTHON COURSE PROMOTION -->
+    <div class="course-highlight">
+      <span class="highlight-badge"><i class="fas fa-star"></i> সর্বোচ্চ চাহিদা</span>
+      <h2><i class="fab fa-python"></i> সম্পূর্ণ পাইথন + জ্যাঙ্গো কোর্স (বাংলায়)</h2>
+      <p style="font-size: 1.1rem; margin-bottom: 0.5rem; color:#1e293b;">৬ মাসের রোডম্যাপে Python, Django, REST API, ৫০+ প্রজেক্ট, ফ্রিল্যান্সিং প্রস্তুতি এবং ক্যারিয়ার গাইডলাইন।</p>
+      <div class="course-price">মাত্র ১৫,০০০ টাকা (৬ মাসের প্যাকেজ) / ৩,০০০ টাকা মাসিক</div>
+      <div class="course-features">
+        <span><i class="fas fa-chalkboard-user"></i> লাইভ ক্লাস (সকাল + রাত)</span>
+        <span><i class="fas fa-mobile-alt"></i> মোবাইল অ্যাপ সাপোর্ট</span>
+        <span><i class="fas fa-certificate"></i> সার্টিফিকেট</span>
+        <span><i class="fas fa-briefcase"></i> ইন্টারভিউ প্রস্তুতি</span>
+      </div>
+      <button class="btn-glow" id="courseEnrollBtn"><i class="fas fa-graduation-cap"></i> এখনই ভর্তি হন</button>
+      <p style="margin-top: 1rem; font-size: 0.85rem; color:#334155;"><i class="fas fa-check-circle" style="color:#f97316;"></i> সীমিত আসন, লাইভ প্রজেক্ট সহ পোর্টফোলিও গ্যারান্টি</p>
+    </div>
+
+    <!-- FREE RESOURCES SECTION (Python, Android, Dependency, etc) -->
+    <div class="free-resources-section">
+      <div class="section-icon-title">
+        <i class="fas fa-gem" style="color:#f97316;"></i> 
+        <span>🎁 ফ্রি রিসোর্স লাইব্রেরি — শিখুন বিনামূল্যে</span>
+      </div>
+      <p style="margin-bottom: 1.2rem; color:#1e293b;">Media Ghor-এর বিশাল ফ্রি রিসোর্স কালেকশন। পাইথন টিউটোরিয়াল, জ্যাঙ্গো প্রজেক্ট, অ্যান্ড্রয়েড অ্যাপ ডিপেন্ডেন্সি গাইড, চিটশিট, এবং আরও অনেক কিছু। নিচের রিসোর্সগুলো আপনার প্রস্তুতিকে করবে শক্তিশালী।</p>
+      <div class="resources-flex">
+        <div class="resource-item" data-link="/resources/?search=python">
+          <i class="fab fa-python"></i> <span>পাইথন প্র্যাকটিক্যাল গাইড</span>
+        </div>
+        <div class="resource-item" data-link="/resources/?search=django">
+          <i class="fas fa-globe"></i> <span>জ্যাঙ্গো টিউটোরিয়াল</span>
+        </div>
+        <div class="resource-item" data-link="/resources/?search=android">
+          <i class="fab fa-android"></i> <span>অ্যান্ড্রয়েড ডিপেন্ডেন্সি</span>
+        </div>
+        <div class="resource-item" data-link="/resources/?search=automation">
+          <i class="fas fa-robot"></i> <span>অটোমেশন স্ক্রিপ্ট</span>
+        </div>
+        <div class="resource-item" data-link="/resources/?search=freelancing">
+          <i class="fas fa-dollar-sign"></i> <span>ফ্রিল্যান্সিং টিপস</span>
+        </div>
+      </div>
+      <div style="margin-top: 1.5rem; text-align: center;">
+        <button class="btn-outline" id="exploreLibraryBtn"><i class="fas fa-book-open"></i> সম্পূর্ণ রিসোর্স লাইব্রেরি দেখুন</button>
+      </div>
+    </div>
+
+    <!-- Core Message & Mission -->
+    <div class="info-card" style="background: linear-gradient(105deg, #fff7ed, #ffffff); border-left: 6px solid #f97316;">
+      <div class="card-icon">🎯🔥</div>
+      <h3>আমাদের কেন্দ্রীয় বার্তা: “Python দিয়ে বাস্তব সমস্যার সমাধান”</h3>
+      <p style="font-size: 1.1rem; line-height: 1.5; color:#1e293b;">Media Ghor শুধু একটি শিক্ষা প্ল্যাটফর্ম নয়, এটি একটি কমিউনিটি। স্ক্রিপ্ট থেকে শুরু করে অটোমেশন টুল, ওয়েব অ্যাপ, AI টুল — সবকিছু বাংলায়, হাতে-কলমে শেখানো হয়। আমাদের কোর্স এবং ফ্রি রিসোর্সের মূল লক্ষ্য: একজন শিক্ষার্থী যেন কোর্স শেষে বাস্তব প্রজেক্ট তৈরি করে ফ্রিল্যান্সিং বা চাকরি শুরু করতে পারে।</p>
+    </div>
+
+    <!-- Our Specialties (Course & Free Resources) -->
+    <div class="grid-2col">
+      <div class="info-card">
+        <div class="card-icon"><i class="fas fa-chalkboard-user"></i></div>
+        <h3>প্রিমিয়াম কোর্সের বিশেষত্ব</h3>
+        <ul>
+          <li><strong>Python Basics to Advanced</strong> (OOP, লাইব্রেরি, অটোমেশন)</li>
+          <li><strong>Django Full Stack</strong> – REST API, ডেপ্লয়মেন্ট, ডাটাবেস ডিজাইন</li>
+          <li><strong>৫০+ রিয়েল প্রজেক্ট</strong> (ই-কমার্স, টুলস, ব্লগ ইঞ্জিন)</li>
+          <li><strong>লাইভ ক্লাস + রাতের সাপোর্ট</strong> (কনফিউশন সলভিং)</li>
+          <li><strong>ফ্রিল্যান্সিং গাইডলাইন, পোর্টফোলিও ও ইন্টারভিউ প্রস্তুতি</strong></li>
+        </ul>
+        <div class="badge">🎓 ১০০% প্র্যাকটিক্যাল</div>
+      </div>
+      <div class="info-card">
+        <div class="card-icon"><i class="fas fa-database"></i></div>
+        <h3>ফ্রি রিসোর্স লাইব্রেরি</h3>
+        <ul>
+          <li><strong>পাইথন ক্র্যাশ কোর্স</strong> (পিডিএফ + ভিডিও)</li>
+          <li><strong>জ্যাঙ্গো চিটশিট & ডেপ্লয়মেন্ট গাইড</strong></li>
+          <li><strong>অ্যান্ড্রয়েড ডেভেলপমেন্ট ডিপেন্ডেন্সি লিস্ট</strong> (Gradle, SDK)</li>
+          <li><strong>অটোমেশন স্ক্রিপ্ট কালেকশন</strong> (PDF, Excel, ফাইল)</li>
+          <li><strong>ফ্রিল্যান্সিং মার্কেটপ্লেস টিপস</strong> (আপওয়ার্ক, ফাইভার)</li>
+        </ul>
+        <div class="badge">📚 প্রতি মাসে নতুন রিসোর্স যুক্ত হচ্ছে</div>
+      </div>
+    </div>
+
+    <!-- YouTube Channel Section (with free learning mention) -->
+    <div class="youtube-highlight">
+      <div><i class="fab fa-youtube" style="font-size: 3.5rem; color:#ff0000;"></i></div>
+      <h2 style="font-size: 1.8rem; margin: 0.5rem 0; color:white;">Media Ghor YouTube চ্যানেল</h2>
+      <p style="max-width: 700px; margin: 0 auto; color:#e2e8f0;">বাংলায় ১০০+ ফ্রি ভিডিও টিউটোরিয়াল, লাইভ কোডিং, প্রজেক্ট সিরিজ। Python, Django, Automation সহ সম্পূর্ণ ফ্রি কন্টেন্ট। শুরু করুন এখনই!</p>
+      <button class="btn-youtube" id="youtubeChannelBtn"><i class="fab fa-youtube"></i> সাবস্ক্রাইব করুন & ভিজিট</button>
+      <p style="margin-top: 1rem; font-size: 0.8rem; color:#cbd5e6;">🎯 চ্যানেলের মূলমন্ত্র: "Python দিয়ে বাস্তব সমস্যার সমাধান — ফ্রিতে শিখুন, দক্ষতা বাড়ান"</p>
+    </div>
+
+    <!-- Target Audience + Niche -->
+    <div class="grid-2col">
+      <div class="info-card">
+        <div class="card-icon">👥🎯</div>
+        <h3>আমাদের টার্গেট অডিয়েন্স</h3>
+        <ul>
+          <li><strong>বিগিনার প্রোগ্রামার</strong> – যারা নতুন, কিন্তু বাস্তব প্রজেক্ট চান</li>
+          <li><strong>ফ্রিল্যান্সার / ইনকাম সিকার</strong> – দক্ষতা বাড়িয়ে আয়ের পথ তৈরি করতে চান</li>
+          <li><strong>ইন্টারমিডিয়েট ডেভেলপার</strong> – জব মার্কেটের জন্য প্রস্তুত হতে চান</li>
+          <li><strong>বাংলাভাষী যেকোনো প্রযুক্তি প্রেমী</strong></li>
+        </ul>
+      </div>
+      <div class="info-card">
+        <div class="card-icon">⚡📌</div>
+        <h3>মেইন নিশ & সাব-নিশ</h3>
+        <p style="margin-bottom: 0.8rem;"><strong>Main Niche:</strong> Python Real Projects (বাস্তব টুলস ও অ্যাপ)</p>
+        <p><strong>Sub-Niches:</strong> অটোমেশন, Django Web Dev, AI টুলস, ফ্রিল্যান্সিং প্রস্তুতি, অ্যান্ড্রয়েড ডিপেন্ডেন্সি ম্যানেজমেন্ট।</p>
+        <div class="badge">💡 Positioning: “Learn Python by building real tools”</div>
+      </div>
+    </div>
+
+    <!-- Journey & Stats -->
+    <div class="journey-stats">
+      <div class="stat-item"><div class="stat-number">১৫০+</div><div>প্রজেক্ট টিউটোরিয়াল</div></div>
+      <div class="stat-item"><div class="stat-number">৮০+</div><div>ঘন্টা ফ্রি কন্টেন্ট</div></div>
+      <div class="stat-item"><div class="stat-number">২৫k+</div><div>ইউটিউব সাবস্ক্রাইবার</div></div>
+      <div class="stat-item"><div class="stat-number">১০০০+</div><div>প্রিমিয়াম কোর্স শিক্ষার্থী</div></div>
+    </div>
+
+    <!-- Why Choose Us - fixed text colors -->
+    <div class="why-choose-box">
+      <h3><i class="fas fa-medal" style="color:#f97316;"></i> কেন মিডিয়া ঘর?</h3>
+      <div style="display: flex; flex-wrap: wrap; gap: 1.5rem; margin-top: 1.5rem;">
+        <div class="feature-item"><i class="fas fa-language"></i> সম্পূর্ণ বাংলায় মানসম্পন্ন কন্টেন্ট</div>
+        <div class="feature-item"><i class="fas fa-laptop-code"></i> রিয়েল প্রজেক্ট-ভিত্তিক শিক্ষা</div>
+        <div class="feature-item"><i class="fas fa-headset"></i> লাইভ সাপোর্ট ও মেন্টরশিপ</div>
+        <div class="feature-item"><i class="fas fa-chart-line"></i> ফ্রিল্যান্সিং ও জব মার্কেট রেডি সিলেবাস</div>
+      </div>
+    </div>
+
+    <!-- Contact & CTA final -->
+    <div class="contact-final">
+      <h3 style="font-size: 1.8rem; color:white;">📞 যেকোনো প্রশ্নে যোগাযোগ করুন</h3>
+      <p style="margin: 1rem 0; color:#cbd5e1;">কল/WhatsApp: <strong style="color:#f97316;">01736008374</strong> | ইমেইল: tanmoymondal1315@gmail.com</p>
+      <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-top: 1rem;">
+        <button class="btn-glow" id="contactWhatsAppBtn"><i class="fab fa-whatsapp"></i> WhatsApp এ মেসেজ</button>
+        <button class="btn-outline" id="contactEmailBtn" style="background: transparent; color: #f97316; border-color:#f97316;">ইমেইল পাঠান</button>
+      </div>
+    </div>
+  </div>
+</main>
+
+{% include 'partial/footer.html' %}
+
+<script>
+  (function() {
+    // Course enroll button
+    const enrollBtn = document.getElementById('courseEnrollBtn');
+    if(enrollBtn) {
+      enrollBtn.addEventListener('click', function() {
+        alert("🎉 কোর্স এনরোলমেন্ট ওপেন! বিস্তারিত জানতে কল করুন: 01736008374 অথবা ইমেইল tanmoymondal1315@gmail.com");
+        window.location.href = '/#contact-section';
+      });
+    }
+
+    // Explore library button: redirect to resources page
+    const libraryBtn = document.getElementById('exploreLibraryBtn');
+    if(libraryBtn) {
+      libraryBtn.addEventListener('click', function() {
+        window.location.href = '/resources/';
+      });
+    }
+
+    // Resource items click: go to resources with specific search
+    const resourceItems = document.querySelectorAll('.resource-item');
+    resourceItems.forEach(item => {
+      item.addEventListener('click', function(e) {
+        const link = this.getAttribute('data-link');
+        if(link) {
+          window.location.href = link;
+        } else {
+          window.location.href = '/resources/';
+        }
+      });
+    });
+
+    // YouTube channel button
+    const youtubeBtn = document.getElementById('youtubeChannelBtn');
+    if(youtubeBtn) {
+      youtubeBtn.addEventListener('click', function() {
+        window.open('https://www.youtube.com/@mediaghor-tanmoy', '_blank');
+      });
+    }
+
+    // Contact buttons
+    const whatsappBtn = document.getElementById('contactWhatsAppBtn');
+    if(whatsappBtn) {
+      whatsappBtn.addEventListener('click', function() {
+        window.open('https://wa.me/8801736008374', '_blank');
+      });
+    }
+    const emailBtn = document.getElementById('contactEmailBtn');
+    if(emailBtn) {
+      emailBtn.addEventListener('click', function() {
+        window.location.href = 'mailto:tanmoymondal1315@gmail.com';
+      });
+    }
+
+    // Adjust margin for fixed navbar
+    function adjustMarginForFixedNav() {
+      const navbar = document.querySelector('nav');
+      const hero = document.querySelector('.about-hero');
+      if(navbar && hero) {
+        const navHeight = navbar.offsetHeight;
+        if(navHeight > 0) {
+          hero.style.marginTop = navHeight + 'px';
+        }
+      }
+    }
+    window.addEventListener('load', adjustMarginForFixedNav);
+    window.addEventListener('resize', adjustMarginForFixedNav);
+    setTimeout(adjustMarginForFixedNav, 100);
+  })();
+</script>
+
+<!-- JSON-LD Schema for about page -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  "name": "Media Ghor About - Python Learning Platform",
+  "description": "Media Ghor offers premium Python and Django courses in Bangla, plus free resources including Python tutorials, Android dependency guides, and freelancing tips.",
+  "url": "{{ request.build_absolute_uri }}",
+  "publisher": {
+    "@type": "Organization",
+    "name": "Media Ghor",
+    "url": "https://mediaghor.com",
+    "logo": "https://mediaghor.com/static/images/logo.png"
+  }
+}
+</script>
+</body>
+</html>

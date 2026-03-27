@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
+  <title>মিডিয়া ঘর - Auto-Hide Navbar | Optimized</title>
+  <style>
+    /* ---------- RESET & BASE ---------- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', 'Hind Siliguri', 'Noto Sans Bengali', system-ui, -apple-system, sans-serif;
+      background: #0a0f1f;
+      color: #f0f3ff;
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+    }
+
+    /* Custom scrollbar (unchanged styling) */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #1e1f2c;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #ff8c42;
+      border-radius: 12px;
+    }
+
+    /* ========== FIXED HEIGHT NAVBAR SYSTEM ========== */
+    /* 
+      - Fixed height: 72px on desktop, 64px on mobile (consistent across all pages)
+      - Uses min-height + explicit height to prevent collapse
+      - Padding system ensures vertical alignment
+      - No flex-wrap causing unexpected height changes
+      - transform-based hide/show (GPU accelerated)
+    */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      background: rgba(10, 25, 47, 0.94);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(0, 255, 255, 0.25);
+      margin-bottom: 0;
+      padding-bottom: 0;
+      
+      /* FIXED HEIGHT SYSTEM - prevents any collapse or size change */
+      height: 72px;
+      min-height: 72px;
+      max-height: 72px;
+      
+      /* Transform-based hide/show (smooth, no layout shift) */
+      transform: translateY(0);
+      transition: transform 0.28s cubic-bezier(0.2, 0.9, 0.4, 1.05);
+      will-change: transform;
+      
+      /* Additional stability */
+      box-sizing: border-box;
+      line-height: 1;
+    }
+    
+    /* Hidden state: slides out smoothly */
+    .navbar.nav-hidden {
+      transform: translateY(-100%);
+    }
+    
+    /* Ensure shadow when visible for depth (optional) */
+    .navbar.nav-visible {
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+    }
+
+    /* Container - maintains vertical centering with fixed navbar height */
+    .nav-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      height: 100%;              /* Fill parent height (72px) */
+      min-height: 100%;
+      display: flex;
+      align-items: center;       /* Perfect vertical alignment */
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: nowrap;         /* CRITICAL: prevents wrapping that could change height */
+    }
+
+    /* Logo area - stable alignment */
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .code-icon {
+      font-size: 1.8rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #0ff, #3eff9e);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .brand-text {
+      font-size: 1.35rem;
+      font-weight: 700;
+      background: linear-gradient(120deg, #fff, #a0f0ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: -0.2px;
+    }
+
+    /* Desktop navigation menu - vertical alignment */
+    .nav-menu {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+      align-items: center;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* 
+      ===== NO ACTIVE / HOVER EFFECTS - COMPLETELY REMOVED =====
+      - No hover color changes
+      - No ::after underline animations
+      - No active state styling
+      - All links visually identical regardless of state
+    */
+    .nav-link {
+      text-decoration: none;
+      color: #e0e4ff;          /* Base color - never changes */
+      font-weight: 500;
+      padding: 0.5rem 0;
+      display: inline-block;
+      line-height: 1.4;
+      transition: none;        /* No transitions at all */
+      position: static;        /* Remove relative positioning used for pseudo-elements */
+    }
+    
+    /* COMPLETE REMOVAL of all hover effects */
+    .nav-link:hover,
+    .nav-link:focus,
+    .nav-link:active,
+    .nav-link.active,
+    .nav-link.active:hover {
+      color: #e0e4ff;          /* Force same color on all states */
+      background: transparent;
+      text-decoration: none;
+      text-shadow: none;
+    }
+    
+    /* Remove underline animations (::after) completely */
+    .nav-link::after {
+      display: none !important;
+      content: none !important;
+    }
+    
+    /* Remove any potential underline from parent or active states */
+    .nav-link.active::after,
+    .nav-link:hover::after {
+      display: none !important;
+    }
+
+    /* ========== MOBILE MENU BUTTON (preserves navbar height) ========== */
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      flex-direction: column;
+      gap: 6px;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 12px;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      /* No hover effect changes */
+    }
+    
+    /* Prevent any hover background changes (keeping consistent) */
+    .mobile-menu-btn:hover,
+    .mobile-menu-btn:focus {
+      background: transparent;
+    }
+
+    .mobile-menu-btn span {
+      width: 26px;
+      height: 2.5px;
+      background: linear-gradient(90deg, #0ff, #ff8c42);
+      border-radius: 4px;
+      transition: transform 0.25s ease, opacity 0.2s ease;
+      transform-origin: center;
+    }
+
+    /* Animated hamburger to X when open */
+    .mobile-menu-btn.open span:nth-child(1) {
+      transform: translateY(8.5px) rotate(45deg);
+    }
+    .mobile-menu-btn.open span:nth-child(2) {
+      opacity: 0;
+      transform: scaleX(0);
+    }
+    .mobile-menu-btn.open span:nth-child(3) {
+      transform: translateY(-8.5px) rotate(-45deg);
+    }
+
+    /* ========== MOBILE MENU PANEL - NO NAVBAR HEIGHT CHANGE ========== */
+    @media (max-width: 768px) {
+      /* Fixed navbar height on mobile: slightly smaller but consistent */
+      .navbar {
+        height: 64px;
+        min-height: 64px;
+        max-height: 64px;
+      }
+      
+      .nav-container {
+        padding: 0 1.2rem;
+      }
+      
+      .brand-text {
+        font-size: 1.2rem;
+      }
+      
+      .code-icon {
+        font-size: 1.6rem;
+      }
+      
+      /* Mobile menu panel - completely independent, does NOT affect navbar size */
+      .nav-menu {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 85%;
+        max-width: 340px;
+        height: 100vh;
+        background: rgba(8, 18, 35, 0.98);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        padding: 5rem 2rem 2rem 2rem;
+        transition: right 0.32s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        gap: 1.6rem;
+        border-left: 2px solid rgba(0, 255, 255, 0.5);
+        box-shadow: -8px 0 32px rgba(0, 0, 0, 0.6);
+        z-index: 1050;
+        margin: 0;
+        overflow-y: auto;
+        pointer-events: auto;
+        /* Ensure no margin/padding impacts navbar height */
+      }
+      
+      .nav-menu.open {
+        right: 0;
+      }
+      
+      /* menu items animation for smoothness */
+      .nav-menu li {
+        opacity: 0;
+        transform: translateX(20px);
+        transition: opacity 0.25s ease, transform 0.3s ease;
+        width: 100%;
+      }
+      
+      .nav-menu.open li {
+        opacity: 1;
+        transform: translateX(0);
+      }
+      
+      .nav-menu.open li:nth-child(1) { transition-delay: 0.03s; }
+      .nav-menu.open li:nth-child(2) { transition-delay: 0.07s; }
+      .nav-menu.open li:nth-child(3) { transition-delay: 0.11s; }
+      .nav-menu.open li:nth-child(4) { transition-delay: 0.15s; }
+      .nav-menu.open li:nth-child(5) { transition-delay: 0.19s; }
+      
+      .nav-link {
+        font-size: 1.35rem;
+        padding: 0.6rem 0;
+        display: block;
+        width: 100%;
+        font-weight: 500;
+        /* No border-bottom that could cause visual noise but fine */
+        border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+      }
+      
+      /* Remove any hover effect on mobile too */
+      .nav-link:hover,
+      .nav-link:active,
+      .nav-link.active {
+        color: #e0e4ff;
+        background: transparent;
+      }
+      
+      .mobile-menu-btn {
+        display: flex;
+      }
+      
+      /* Overlay for mobile menu - does not affect navbar */
+      .menu-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.65);
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+        z-index: 1040;
+        display: none;
+        opacity: 0;
+        transition: opacity 0.28s ease;
+        cursor: pointer;
+      }
+      
+      .menu-overlay.active {
+        display: block;
+        opacity: 1;
+      }
+      
+      /* Body lock style - prevents background scroll but navbar remains fixed & stable */
+      body.menu-open {
+        overflow: hidden;
+        position: fixed;
+        width: 100%;
+      }
+    }
+
+    /* ========== DEMO CONTENT STYLES (unchanged layout but ensures scroll works) ========== */
+    .demo-content {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+      background: radial-gradient(circle at 20% 40%, #0f172a, #020617);
+    }
+    
+    .section-block {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 3rem 1.5rem;
+      border-top: 1px solid rgba(0, 255, 255, 0.15);
+      background: #0a0f1f;
+    }
+    
+    .section-block:nth-child(even) {
+      background: #0c1125;
+    }
+    
+    .section-title {
+      font-size: 2.5rem;
+      background: linear-gradient(135deg, #0ff, #ff9a5e);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 1.2rem;
+    }
+    
+    .section-desc {
+      font-size: 1.2rem;
+      color: #cbd5e6;
+      max-width: 700px;
+      line-height: 1.6;
+    }
+    
+    .demo-content h1 {
+      font-size: 2.8rem;
+      background: linear-gradient(135deg, #0ff, #ff9a5e);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 1rem;
+    }
+    
+    .demo-content p {
+      font-size: 1.2rem;
+      color: #cbd5e6;
+      max-width: 600px;
+      margin-bottom: 2rem;
+    }
+    
+    .card-grid {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 2rem;
+    }
+    
+    .card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(8px);
+      padding: 1.5rem;
+      border-radius: 28px;
+      border: 1px solid rgba(0, 255, 255, 0.3);
+      width: 240px;
+    }
+    
+    .floating-demo {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #ff8c42;
+      width: 55px;
+      height: 55px;
+      border-radius: 55px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 5px 18px rgba(255, 140, 66, 0.5);
+      z-index: 999;
+      font-size: 26px;
+      transition: transform 0.2s ease;
+    }
+    
+    .floating-demo:hover {
+      transform: scale(1.05);
+    }
+    
+    .scroll-hint {
+      margin-top: 2rem;
+      background: rgba(0,255,255,0.1);
+      padding: 0.5rem 1rem;
+      border-radius: 40px;
+      font-size: 0.85rem;
+      display: inline-block;
+      backdrop-filter: blur(4px);
+    }
+    
+    @media (max-width: 680px) {
+      .demo-content h1, .section-title {
+        font-size: 1.9rem;
+      }
+      .section-desc, .demo-content p {
+        font-size: 1rem;
+      }
+    }
+    
+    /* Prevent body overflow & CLS */
+    html, body {
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+    
+    /* Additional body padding to avoid content being hidden under fixed navbar */
+    body {
+      padding-top: 72px;
+    }
+    
+    @media (max-width: 768px) {
+      body {
+        padding-top: 64px;
+      }
+    }
+    
+    /* Ensure anchor links offset for fixed navbar */
+    [id] {
+      scroll-margin-top: 80px;
+    }
+    
+    @media (max-width: 768px) {
+      [id] {
+        scroll-margin-top: 72px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- FIXED HEIGHT NAVBAR with auto-hide on scroll -->
+  <nav class="navbar" id="navbar" aria-label="Main navigation">
+    <div class="nav-container">
+      <a href="{% url 'home' %}" class="nav-logo" aria-label="Homepage">
+        <span class="code-icon">&lt;/&gt;</span>
+        <span class="brand-text">Media Ghor</span>
+      </a>
+
+      <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle navigation menu" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <div class="menu-overlay" id="menuOverlay"></div>
+
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="{% url 'home' %}" class="nav-link">🏠 Home - হোম</a></li>
+        <li><a href="{% url 'home' %}#contact-section" class="nav-link">📞 Contact - যোগাযোগ</a></li>
+        <li><a href="{% url 'home' %}#course-structure" class="nav-link">📘 Course - কোর্স</a></li>
+        <li><a href="{% url 'resources:library_list' %}" class="nav-link">📚 Resources - রিসোর্স</a></li>
+        <li><a href="{% url 'about' %}" class="nav-link">🌟 About - আমাদের সম্পর্কে</a></li>
+      </ul>
+    </div>
+  </nav>
+
+
+  <script>
+    (function() {
+      // ========== 1. AUTO-HIDE SCROLL LOGIC (SMOOTH WITH THRESHOLD) ==========
+      const navbar = document.getElementById('navbar');
+      let lastScrollPosition = window.scrollY;
+      let ticking = false;
+      let isNavbarHidden = false;
+      let scrollTimeout = null;
+      
+      // threshold for small scrolls: only hide if scroll delta > 8px, show if delta < -8px
+      const SCROLL_THRESHOLD = 8;
+      
+      function updateNavbarVisibility() {
+        if (!navbar) return;
+        
+        const currentScroll = window.scrollY;
+        const scrollDelta = currentScroll - lastScrollPosition;
+        
+        // Always ensure navbar is visible when at top (scrollY <= 10)
+        if (currentScroll <= 10) {
+          if (isNavbarHidden) {
+            navbar.classList.remove('nav-hidden');
+            navbar.classList.add('nav-visible');
+            isNavbarHidden = false;
+          }
+          lastScrollPosition = currentScroll;
+          return;
+        }
+        
+        // Scrolling down beyond threshold -> hide navbar (if not already hidden)
+        if (scrollDelta > SCROLL_THRESHOLD && !isNavbarHidden) {
+          navbar.classList.add('nav-hidden');
+          navbar.classList.remove('nav-visible');
+          isNavbarHidden = true;
+        } 
+        // Scrolling up beyond threshold -> show navbar (if hidden)
+        else if (scrollDelta < -SCROLL_THRESHOLD && isNavbarHidden) {
+          navbar.classList.remove('nav-hidden');
+          navbar.classList.add('nav-visible');
+          isNavbarHidden = false;
+        }
+        
+        // Update last position for next scroll event
+        lastScrollPosition = currentScroll;
+      }
+      
+      // Throttled scroll handler with requestAnimationFrame for smooth performance
+      window.addEventListener('scroll', function() {
+        if (!ticking) {
+          requestAnimationFrame(function() {
+            updateNavbarVisibility();
+            ticking = false;
+          });
+          ticking = true;
+        }
+        
+        // Additional safety: clear any pending timeout to prevent jitter
+        if (scrollTimeout) clearTimeout(scrollTimeout);
+      });
+      
+      // ========== 2. IMPROVED ANCHOR LINK SMOOTH SCROLL (with offset for fixed navbar) ==========
+      const allLinks = document.querySelectorAll('.nav-link');
+      allLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+          const href = this.getAttribute('href');
+          // Handle anchor links smoothly
+          if (href && href.startsWith('#')) {
+            e.preventDefault();
+            const targetId = href.substring(1);
+            const targetElement = document.getElementById(targetId);
+            
+            if (targetElement) {
+              // Close mobile menu if open (always ensures menu closes)
+              closeMobileMenuIfOpen();
+              
+              // Get navbar height for scroll offset
+              const navbarHeight = navbar ? navbar.offsetHeight : 72;
+              const elementPosition = targetElement.getBoundingClientRect().top + window.scrollY;
+              const offsetPosition = elementPosition - navbarHeight - 16;
+              
+              window.scrollTo({
+                top: offsetPosition,
+                behavior: 'smooth'
+              });
+              
+              // After smooth scroll, reset lastScrollPosition to avoid navbar flicker
+              setTimeout(() => {
+                lastScrollPosition = window.scrollY;
+                // Ensure navbar state is correct after scroll
+                if (window.scrollY <= 10 && isNavbarHidden) {
+                  if (navbar) {
+                    navbar.classList.remove('nav-hidden');
+                    navbar.classList.add('nav-visible');
+                    isNavbarHidden = false;
+                  }
+                }
+              }, 100);
+            }
+          } else if (href === '#') {
+            // Home link: scroll to top smoothly
+            e.preventDefault();
+            closeMobileMenuIfOpen();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            setTimeout(() => {
+              lastScrollPosition = window.scrollY;
+              if (navbar && isNavbarHidden) {
+                navbar.classList.remove('nav-hidden');
+                navbar.classList.add('nav-visible');
+                isNavbarHidden = false;
+              }
+            }, 100);
+          } else {
+            // For non-anchor links, just close menu
+            closeMobileMenuIfOpen();
+          }
+        });
+      });
+      
+      // Helper to close mobile menu
+      function closeMobileMenuIfOpen() {
+        const navMenu = document.getElementById('navMenu');
+        const menuBtn = document.getElementById('mobileMenuBtn');
+        const overlay = document.getElementById('menuOverlay');
+        const bodyEl = document.body;
+        
+        if (navMenu && navMenu.classList.contains('open')) {
+          navMenu.classList.remove('open');
+          if (menuBtn) menuBtn.classList.remove('open');
+          if (overlay) overlay.classList.remove('active');
+          bodyEl.classList.remove('menu-open');
+          
+          // Restore body scroll if needed
+          if (bodyEl.style.position === 'fixed') {
+            const scrollY = bodyEl.dataset.scrollPosition;
+            bodyEl.style.position = '';
+            bodyEl.style.top = '';
+            bodyEl.style.overflowY = '';
+            if (scrollY) {
+              window.scrollTo(0, parseInt(scrollY, 10));
+              delete bodyEl.dataset.scrollPosition;
+            }
+          }
+          if (menuBtn) menuBtn.setAttribute('aria-expanded', 'false');
+        }
+      }
+      
+      // ========== 3. MOBILE MENU LOGIC (no navbar height change) ==========
+      const mobileBtn = document.getElementById('mobileMenuBtn');
+      const navMenu = document.getElementById('navMenu');
+      const overlayEl = document.getElementById('menuOverlay');
+      const bodyElement = document.body;
+      
+      function disableBodyScrollMobile() {
+        const scrollY = window.scrollY;
+        bodyElement.style.position = 'fixed';
+        bodyElement.style.top = `-${scrollY}px`;
+        bodyElement.style.width = '100%';
+        bodyElement.style.overflowY = 'hidden';
+        bodyElement.dataset.scrollPosition = scrollY;
+      }
+      
+      function enableBodyScrollMobile() {
+        const scrollY = bodyElement.dataset.scrollPosition;
+        bodyElement.style.position = '';
+        bodyElement.style.top = '';
+        bodyElement.style.overflowY = '';
+        if (scrollY) {
+          window.scrollTo(0, parseInt(scrollY, 10));
+          delete bodyElement.dataset.scrollPosition;
+        }
+      }
+      
+      function openMobileMenu() {
+        if (!navMenu || navMenu.classList.contains('open')) return;
+        disableBodyScrollMobile();
+        navMenu.classList.add('open');
+        if (mobileBtn) mobileBtn.classList.add('open');
+        if (overlayEl) overlayEl.classList.add('active');
+        bodyElement.classList.add('menu-open');
+        if (mobileBtn) mobileBtn.setAttribute('aria-expanded', 'true');
+      }
+      
+      function closeMobileMenu() {
+        if (!navMenu || !navMenu.classList.contains('open')) return;
+        navMenu.classList.remove('open');
+        if (mobileBtn) mobileBtn.classList.remove('open');
+        if (overlayEl) overlayEl.classList.remove('active');
+        bodyElement.classList.remove('menu-open');
+        enableBodyScrollMobile();
+        if (mobileBtn) mobileBtn.setAttribute('aria-expanded', 'false');
+      }
+      
+      if (mobileBtn) {
+        mobileBtn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          if (navMenu && navMenu.classList.contains('open')) {
+            closeMobileMenu();
+          } else {
+            openMobileMenu();
+          }
+        });
+      }
+      
+      if (overlayEl) {
+        overlayEl.addEventListener('click', closeMobileMenu);
+      }
+      
+      // Escape key closes menu
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && navMenu && navMenu.classList.contains('open')) {
+          closeMobileMenu();
+        }
+      });
+      
+      // Resize handler: close mobile menu on desktop & reset body scroll
+      let resizeTimer;
+      window.addEventListener('resize', function() {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function() {
+          if (window.innerWidth > 768) {
+            closeMobileMenu();
+            if (bodyElement.style.position === 'fixed') {
+              enableBodyScrollMobile();
+            }
+          }
+          // Ensure navbar state remains correct on resize (no jitter)
+          if (navbar) {
+            if (window.scrollY <= 10 && isNavbarHidden) {
+              navbar.classList.remove('nav-hidden');
+              navbar.classList.add('nav-visible');
+              isNavbarHidden = false;
+            }
+            lastScrollPosition = window.scrollY;
+          }
+        }, 100);
+      });
+      
+      // On load: ensure navbar is visible and no hidden stuck state
+      window.addEventListener('load', function() {
+        lastScrollPosition = window.scrollY;
+        if (navbar) {
+          if (window.scrollY <= 10 && navbar.classList.contains('nav-hidden')) {
+            navbar.classList.remove('nav-hidden');
+            navbar.classList.add('nav-visible');
+            isNavbarHidden = false;
+          } else if (navbar.classList.contains('nav-hidden')) {
+            isNavbarHidden = true;
+          } else {
+            isNavbarHidden = false;
+          }
+        }
+      });
+      
+      // Floating demo button
+      const demoFloat = document.getElementById('demoFloatBtn');
+      if (demoFloat) {
+        demoFloat.addEventListener('click', () => {
+          alert("📞 যোগাযোগ: hello@mediaghor.com | +880 1888-888888");
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

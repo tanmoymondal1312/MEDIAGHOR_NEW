@@ -1,0 +1,880 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Media Ghor | বাংলায় পাইথন শেখার প্ল্যাটফর্ম</title>
+
+  <link rel="icon" type="image/png" href="{% static 'images/favicon/favicon-96x96.png' %}" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="{% static 'images/favicon/favicon.svg' %}" />
+  <link rel="shortcut icon" href="{% static 'images/favicon/favicon.ico' %}" />
+  <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/favicon/apple-touch-icon.png' %}" />
+  <meta name="apple-mobile-web-app-title" content="Media Ghor" />
+  <link rel="manifest" href="{% static 'images/favicon/site.webmanifest' %}"/>
+
+  <meta name="description" content="Media Ghor - Python, Django ওয়েব ডেভেলপমেন্ট এবং ফ্রিল্যান্সিং শিখুন বাংলায়। বাস্তব প্রজেক্ট, পোর্টফোলিও তৈরি এবং ক্যারিয়ার গড়ার সুযোগ।">
+  <meta name="keywords" content="Python Bangla, Django course, Web development Bangladesh, Freelancing preparation, Media Ghor, মিডিয়া ঘর, পাইথন শিখুন">
+  <meta name="author" content="Media Ghor">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="Media Ghor - Python দিয়ে বাস্তব সমস্যা সমাধান শিখুন">
+  <meta property="og:description" content="১ মাসেই Python দিয়ে নিজের টুল বানাতে শিখুন। সম্পূর্ণ बांलाय় कोर्स, प्रजेक्ट ओ क्यारियर गाइडलाइन।">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="bn_BD">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Media Ghor | Python শেখার বাংলা প্ল্যাটফর্ম">
+  <meta name="twitter:description" content="বাস্তব প্রজেক্ট, Django ও ফ্রিল্যান্সিং প্রস্তুতি। আজই যোগ দিন!">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', 'Hind Siliguri', 'Noto Sans Bengali', system-ui, -apple-system, sans-serif;
+      background: #0a0f1f;
+      color: #f0f3ff;
+      scroll-behavior: smooth;
+    }
+    /* custom scroll */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #1e1f2c;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #ff8c42;
+      border-radius: 12px;
+    }
+    /* reusable classes */
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    /* ENHANCED HERO SECTION */
+    .hero {
+      min-height: 85vh;
+      display: flex;
+      align-items: center;
+      background: radial-gradient(circle at 10% 30%, #0a1a3a, #020617);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      width: 200%;
+      height: 200%;
+      background: repeating-linear-gradient(45deg, #00ffff08 0px, #00ffff08 2px, #ff8c4208 2px, #ff8c4208 8px);
+      animation: drift 20s linear infinite;
+      pointer-events: none;
+    }
+    @keyframes drift {
+      0% { transform: translate(0,0);}
+      100% { transform: translate(10%, 10%);}
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 750px;
+    }
+    .hero h1 {
+      font-size: 3.2rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #0ff, #39ff14, #ffa500);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+    .hero p {
+      font-size: 1.2rem;
+      color: #cbd5ff;
+      margin-bottom: 1.2rem;
+      line-height: 1.5;
+    }
+    .hero-highlight {
+      background: linear-gradient(90deg, #ff8c4233, transparent);
+      padding: 0.8rem 1.2rem;
+      border-left: 4px solid #ff8c42;
+      margin: 1rem 0 1.5rem 0;
+      border-radius: 0 12px 12px 0;
+    }
+    .btn-primary {
+      background: linear-gradient(95deg, #ff8c42, #ff4d00);
+      border: none;
+      padding: 1rem 2.2rem;
+      font-size: 1.2rem;
+      font-weight: 700;
+      border-radius: 60px;
+      color: white;
+      cursor: pointer;
+      transition: 0.25s;
+      box-shadow: 0 8px 20px #ff8c4240;
+      font-family: inherit;
+    }
+    .btn-primary:hover {
+      transform: scale(1.05);
+      box-shadow: 0 15px 28px #ff8c42aa;
+      background: linear-gradient(95deg, #ff9e5e, #ff6010);
+    }
+    /* GUIDANCE SECTION */
+    .guidance-wrapper {
+      background: linear-gradient(135deg, #0a1230, #03071e);
+      border-radius: 48px;
+      margin: 2rem 0 3rem 0;
+      padding: 2.5rem;
+      border: 1px solid rgba(0, 255, 255, 0.25);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    }
+    .guidance-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+    .guidance-card {
+      background: rgba(10, 25, 55, 0.7);
+      backdrop-filter: blur(8px);
+      border-radius: 28px;
+      padding: 1.8rem;
+      flex: 1;
+      min-width: 260px;
+      text-align: center;
+      border-bottom: 3px solid #ff8c42;
+      transition: all 0.3s ease;
+    }
+    .guidance-card:hover {
+      transform: translateY(-8px);
+      border-bottom-color: #0ff;
+      box-shadow: 0 20px 30px -8px rgba(0,255,255,0.2);
+    }
+    .guidance-icon {
+      font-size: 2.8rem;
+      margin-bottom: 1rem;
+    }
+    .guidance-card h3 {
+      font-size: 1.6rem;
+      color: #ffb347;
+      margin-bottom: 0.8rem;
+    }
+    .guidance-card p {
+      color: #ccd9ff;
+      line-height: 1.5;
+    }
+    .app-badge {
+      background: rgba(0, 255, 255, 0.15);
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      border-radius: 40px;
+      margin-top: 0.8rem;
+      font-size: 0.85rem;
+      border: 1px solid #0ff;
+    }
+    /* Fee Card */
+    .fee-card {
+      background: linear-gradient(145deg, #1a2545, #0c1230);
+      border-radius: 36px;
+      padding: 1.8rem;
+      text-align: center;
+      max-width: 500px;
+      margin: 0 auto;
+      border: 1px solid rgba(255,140,66,0.5);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+    }
+    .fee-amount {
+      font-size: 2.8rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #ffaa66, #ff8c42);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin: 0.5rem 0;
+    }
+    .fee-note {
+      color: #aad0ff;
+      font-size: 0.9rem;
+    }
+    .btn-outline {
+      background: transparent;
+      border: 2px solid #ff8c42;
+      padding: 0.6rem 1.6rem;
+      border-radius: 40px;
+      color: #ffaa66;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s;
+      margin-top: 1rem;
+      font-family: inherit;
+    }
+    .btn-outline:hover {
+      background: #ff8c42;
+      color: #0a0f1f;
+    }
+    /* course structure section */
+    .section {
+      padding: 5rem 0;
+    }
+    .section-title {
+      font-size: 2.4rem;
+      text-align: center;
+      margin-bottom: 2.5rem;
+      background: linear-gradient(120deg, #0ff, #a5ff9e);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      display: inline-block;
+      width: 100%;
+    }
+    .structure-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      justify-content: center;
+    }
+    .structure-card {
+      background: rgba(15, 25, 55, 0.7);
+      backdrop-filter: blur(4px);
+      border-radius: 32px;
+      padding: 1.8rem;
+      flex: 1;
+      min-width: 220px;
+      border: 1px solid rgba(0, 255, 255, 0.3);
+      transition: 0.3s;
+      text-align: center;
+    }
+    .structure-card:hover {
+      transform: translateY(-10px);
+      border-color: #0ff;
+      box-shadow: 0 20px 35px -10px #0ff33c;
+    }
+    .structure-card h3 {
+      font-size: 2rem;
+      color: #ffb347;
+      margin-bottom: 0.8rem;
+    }
+    .structure-card p {
+      color: #ccd9ff;
+    }
+    .motivation-text {
+      text-align: center;
+      margin-top: 2.5rem;
+      font-size: 1.3rem;
+      background: #ff8c4220;
+      padding: 1rem;
+      border-radius: 80px;
+      border-left: 5px solid #ff8c42;
+      font-weight: 600;
+    }
+    /* features cards */
+    .features-grid {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+    }
+    .feature-card {
+      background: linear-gradient(145deg, #101a30, #081020);
+      border-radius: 2rem;
+      padding: 2rem;
+      flex: 1;
+      min-width: 260px;
+      transition: all 0.3s ease;
+      border-bottom: 3px solid #0ff;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+    }
+    .feature-card:hover {
+      transform: scale(1.02) translateY(-6px);
+      border-bottom-color: #ff8c42;
+      box-shadow: 0 20px 35px -8px #0ff55a;
+    }
+    .feature-icon {
+      font-size: 2.8rem;
+      margin-bottom: 1rem;
+    }
+    .feature-card h3 {
+      font-size: 1.7rem;
+      margin-bottom: 0.8rem;
+      color: #ffb347;
+    }
+    .feature-card p {
+      line-height: 1.5;
+    }
+    /* image gallery section */
+    .image-showcase {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2.5rem;
+      justify-content: center;
+      margin: 2rem 0;
+    }
+    .img-card {
+      background: #0d142ccc;
+      border-radius: 28px;
+      padding: 1rem;
+      max-width: 320px;
+      text-align: center;
+      backdrop-filter: blur(8px);
+      transition: 0.3s;
+      border: 1px solid cyan;
+    }
+    .img-card img {
+      width: 100%;
+      border-radius: 24px;
+      aspect-ratio: 1 / 0.9;
+      object-fit: cover;
+      display: block;
+    }
+    .img-card p {
+      margin-top: 12px;
+      font-weight: 500;
+      color: #c5e0ff;
+    }
+    /* NEW CONTACT SECTION */
+    .contact-section {
+      background: linear-gradient(145deg, #0d1535, #050a1a);
+      border-radius: 48px;
+      margin: 3rem 0 4rem 0;
+      padding: 2.5rem;
+      border: 1px solid rgba(0, 255, 255, 0.3);
+      box-shadow: 0 20px 35px rgba(0,0,0,0.4);
+    }
+    .contact-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      justify-content: center;
+      align-items: stretch;
+    }
+    .contact-card {
+      background: rgba(10, 25, 55, 0.6);
+      backdrop-filter: blur(8px);
+      border-radius: 32px;
+      padding: 2rem;
+      flex: 1;
+      min-width: 260px;
+      text-align: center;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255,140,66,0.3);
+    }
+    .contact-card:hover {
+      transform: translateY(-5px);
+      border-color: #ff8c42;
+      box-shadow: 0 15px 30px rgba(255,140,66,0.2);
+    }
+    .contact-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+    .contact-card h3 {
+      font-size: 1.6rem;
+      color: #ffb347;
+      margin-bottom: 1rem;
+    }
+    .contact-detail {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #0ff;
+      margin: 0.8rem 0;
+      word-break: break-all;
+    }
+    .contact-detail a {
+      color: #0ff;
+      text-decoration: none;
+      transition: 0.2s;
+    }
+    .contact-detail a:hover {
+      color: #ffaa66;
+      text-decoration: underline;
+    }
+    .contact-label {
+      color: #aac8ff;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+    }
+    .contact-btn {
+      background: linear-gradient(95deg, #ff8c42, #ff4d00);
+      border: none;
+      padding: 0.7rem 1.5rem;
+      border-radius: 40px;
+      color: white;
+      cursor: pointer;
+      font-weight: 600;
+      margin-top: 1rem;
+      transition: 0.2s;
+      font-family: inherit;
+    }
+    .contact-btn:hover {
+      transform: scale(1.05);
+      background: linear-gradient(95deg, #ff9e5e, #ff6010);
+    }
+    /* floating btn */
+    .floating-btn {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      background: #ff8c42;
+      width: 60px;
+      height: 60px;
+      border-radius: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 6px 18px #ff8c42cc;
+      transition: 0.2s;
+      z-index: 999;
+      border: none;
+      font-size: 28px;
+    }
+    .floating-btn:hover {
+      transform: scale(1.1);
+      background: #ff6a1a;
+    }
+    @media (max-width: 680px) {
+      .hero h1 { font-size: 2.2rem; }
+      .hero p { font-size: 1rem; }
+      .section-title { font-size: 1.8rem; }
+      .guidance-card h3 { font-size: 1.3rem; }
+      .fee-amount { font-size: 2rem; }
+      .contact-detail { font-size: 1rem; }
+      .contact-card h3 { font-size: 1.3rem; }
+    }
+    /* animations */
+    @keyframes fadeSlide {
+      from { opacity: 0; transform: translateY(20px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
+    .structure-card, .feature-card, .img-card, .hero-content, .guidance-card, .contact-card {
+      animation: fadeSlide 0.5s ease-out;
+    }
+    .dynamic-contact-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      backdrop-filter: blur(5px);
+    }
+    .dynamic-contact-modal > div {
+      background: #0c1a2f;
+      border-radius: 32px;
+      max-width: 340px;
+      padding: 1.8rem;
+      text-align: center;
+      border: 1px solid #0ff;
+      box-shadow: 0 20px 35px rgba(0,0,0,0.8);
+    }
+    .dynamic-contact-modal button {
+      background: #ff8c42;
+      border: none;
+      padding: 8px 18px;
+      border-radius: 40px;
+      color: white;
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.2s;
+      font-family: inherit;
+    }
+    .dynamic-contact-modal button:hover {
+      background: #ffa44a;
+    }
+  </style>
+</head>
+<body>
+  {% include 'partial/navbar.html' %}
+
+  <main class="main-content">
+  <!-- HERO SECTION (Enhanced description) -->
+  <section class="hero">
+    <div class="container hero-content">
+      <h1>“Python দিয়ে বাস্তব সমস্যা সমাধান শিখুন”</h1>
+      <p>১ মাসেই Python দিয়ে নিজের টুল বানাতে শিখুন। সম্পূর্ণ বাংলায় লাইভ ক্লাস, রিয়েল প্রজেক্ট এবং ফ্রিল্যান্সিং প্রস্তুতি। ৬ মাসের রোডম্যাপে Python, Django, REST API, ডেপ্লয়মেন্ট সহ ৫০+ প্রজেক্ট।</p>
+      <div class="hero-highlight">
+        🚀 <strong>কোর্স শেষে যা থাকছে:</strong> পোর্টফোলিও তৈরি, ৩টি বড় প্রজেক্ট, ফ্রিল্যান্সিং গাইডলাইন, ইন্টারভিউ প্রস্তুতি এবং সার্টিফিকেট।
+      </div>
+      <p>আমাদের সাথে শিখুন বাস্তব উদাহরণ, লাইভ কোডিং ও ব্যক্তিগত মেন্টরশিপ। স্কুল-কলেজের শিক্ষার্থী থেকে শুরু করে পেশাজীবী, সবাই পারবেন নিজের ক্যারিয়ার গড়তে। মিডিয়া ঘর এনেছে সম্পূর্ণ বাংলায় পাইথন ও ডিজাঙ্গো কোর্স — যা আপনাকে করে তুলবে প্রফেশনাল ডেভেলপার।</p>
+      <button class="btn-primary" id="joinNowBtn">আজই যোগ দিন</button>
+    </div>
+  </section>
+
+
+
+  <!-- Course Structure Section -->
+  <div id="course-structure" class="container section">
+    <h2 class="section-title">📘 আমাদের কোর্সের স্ট্রাকচার</h2>
+    <div class="structure-grid">
+      <div class="structure-card"><h3>🐍 ২ মাস</h3><p>Python Basics → Advanced (অটোমেশন, ফাইল হ্যান্ডলিং, লজিক বিল্ডিং, OOP, লাইব্রেরি)</p></div>
+      <div class="structure-card"><h3>🌐 ৩ মাস</h3><p>Django Web Development – পূর্ণ ওয়েব অ্যাপ, ডেপ্লয়মেন্ট, REST API, ডাটাবেজ ডিজাইন</p></div>
+      <div class="structure-card"><h3>💼 ১ মাস</h3><p>Job / Freelance Preparation – রেজিউমি, প্রজেক্ট পোর্টফোলিও, ইন্টারভিউ সিমুলেশন</p></div>
+    </div>
+    <div class="motivation-text">
+      ✨ মিনি-প্রজেক্ট, রিয়েল টুলস ও পোর্টফোলিও-রেডি অ্যাপস অন্তর্ভুক্ত ✨<br>
+      🔥 এই কোর্স শেষ করলে আপনি জব বা ফ্রিল্যান্সিং শুরু করতে পারবেন!
+    </div>
+  </div>
+
+  <!-- GUIDANCE SECTION: How we guide students -->
+  <div class="container" style="padding-top: 1rem;">
+    <h2 class="section-title">🎯 আমাদের গাইডলাইন পদ্ধতি</h2>
+    <div class="guidance-wrapper">
+      <div class="guidance-grid">
+        <div class="guidance-card">
+          <div class="guidance-icon">🌅📖</div>
+          <h3>সকাল ৮:৩০ - ৯:৩০ AM</h3>
+          <p><strong>লাইভ ক্লাস (Meets/Zoom)</strong><br>প্রতিদিন সকালে নতুন টপিক, কোডিং ডেমো, লাইভ প্রশ্নোত্তর ও প্র্যাকটিক্যাল সমস্যা সমাধান।</p>
+        </div>
+        <div class="guidance-card">
+          <div class="guidance-icon">🌙💡</div>
+          <h3>রাত ৯:০০ - ১০:০০ PM</h3>
+          <p><strong>কনফিউশন সলভিং ক্লাস</strong><br>দিনের শেখা বিষয়ের জটিলতা, প্রজেক্টের বাগ ফিক্সিং, এক্সট্রা চ্যালেঞ্জ ও সাপোর্ট সেশন।</p>
+        </div>
+        <div class="guidance-card">
+          <div class="guidance-icon">📱🚀</div>
+          <h3>মিডিয়া ঘর অফিসিয়াল অ্যাপ</h3>
+          <p>ক্লাসের রেকর্ডিং, নোটিশ, অ্যাসাইনমেন্ট জমা, Zoom/Meets লিংক — সব কিছু আমাদের মোবাইল অ্যাপে।</p>
+          <div class="app-badge">📲 শীঘ্রই ডাউনলোড করুন</div>
+        </div>
+      </div>
+      <!-- COURSE FEE SECTION -->
+      <div class="fee-card">
+        <span style="font-size:1.2rem; font-weight:600;">💰 কোর্স ফি</span>
+        <div class="fee-amount">৩,০০০ টাকা / মাস</div>
+        <p class="fee-note">(সরাসরি ৬ মাসের প্যাকেজে মাত্র ১৫,০০০ টাকা)</p>
+        <p style="margin: 10px 0 0; font-size:0.85rem;">✅ লাইভ ক্লাস + রেকর্ডিং + প্রজেক্ট রিভিউ + ক্যারিয়ার কাউন্সেলিং</p>
+        <button class="btn-outline" id="feeEnrollBtn">বিস্তারিত জানুন</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURES SECTION (আমাদের বিশেষত্ব) -->
+  <div class="container section">
+    <h2 class="section-title">💡 আমাদের বিশেষত্ব</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🐍⚙️</div>
+        <h3>Python Basics to Pro</h3>
+        <p>লজিক, অটোমেশন, এবং বাস্তব প্রজেক্ট তৈরি করুন — স্ক্রিপ্ট থেকে শুরু করে ডেস্কটপ টুলস।</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🌍🚀</div>
+        <h3>Django Development</h3>
+        <p>পূর্ণ ওয়েব অ্যাপ তৈরি শিখুন এবং ডিপ্লয় করুন, ডাটাবেজ ও ইউজার অথেন্টিকেশন সহ।</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🛠️📁</div>
+        <h3>Real Projects</h3>
+        <p>প্র্যাকটিক্যাল টুলস যা আপনি দৈনন্দিন কাজে ব্যবহার করতে পারবেন (PDF টুল, অটোমেটর, ব্লগ ইঞ্জিন)</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- IMAGES SECTION -->
+  <div class="container section" style="padding-top:0">
+      <h2 class="section-title">📸 আমাদের ক্লাসরুম & প্রশিক্ষক</h2>
+
+      <div class="image-showcase">
+          <!-- Python Workshop Card -->
+          <div class="img-card">
+              <img src="{% static 'images/python_class.webp' %}" alt="পাইথন প্রশিক্ষণ স্কুল শিক্ষার্থীদের জন্য">
+              <p>🏫 স্কুল শিক্ষার্থীদের জন্য হাতে-কলমে পাইথন প্রশিক্ষণ</p>
+          </div>
+
+          <!-- Trainer Card -->
+          <div class="img-card">
+              <img src="{% static 'images/trainer.jpg' %}" alt="মিডিয়া ঘর প্রতিষ্ঠাতা">
+              <p>👨‍🏫 মিডিয়া ঘর এর প্রতিষ্ঠাতা ও প্রধান প্রশিক্ষক</p>
+          </div>
+      </div>
+
+      <p style="text-align:center; margin-top:10px; font-size:0.9rem;">
+          ✨ বাস্তব অভিজ্ঞতা, সরাসরি ক্লাস ও লাইভ সাপোর্ট
+      </p>
+  </div>
+
+  <!-- NEW CONTACT SECTION -->
+  <div class="container" id="contact-section">
+    <h2 class="section-title">📞 যোগাযোগ করুন</h2>
+    <div class="contact-section">
+      <div class="contact-grid">
+        <div class="contact-card">
+          <div class="contact-icon">📱💬</div>
+          <h3>WhatsApp / Phone</h3>
+          <div class="contact-detail">
+            <a href="tel:01736008374">01736008374</a>
+          </div>
+          <p class="contact-label">সরাসরি কল অথবা WhatsApp এ মেসেজ করুন</p>
+          <button class="contact-btn" onclick="window.location.href='https://wa.me/8801736008374'">WhatsApp এ যোগাযোগ</button>
+        </div>
+        
+        <div class="contact-card">
+          <div class="contact-icon">✉️📧</div>
+          <h3>ব্যক্তিগত ইমেইল</h3>
+          <div class="contact-detail">
+            <a href="mailto:tanmoymondal1315@gmail.com">tanmoymondal1315@gmail.com</a>
+          </div>
+          <p class="contact-label">প্রশিক্ষকের সাথে সরাসরি যোগাযোগ</p>
+          <button class="contact-btn" onclick="window.location.href='mailto:tanmoymondal1315@gmail.com'">ইমেইল পাঠান</button>
+        </div>
+        
+        <div class="contact-card">
+          <div class="contact-icon">🏢📮</div>
+          <h3>অফিসিয়াল ইমেইল</h3>
+          <div class="contact-detail">
+            <a href="mailto:contact@mediaghor.com">contact@mediaghor.com</a>
+          </div>
+          <p class="contact-label">কোম্পানি সংক্রান্ত সকল যোগাযোগ</p>
+          <button class="contact-btn" onclick="window.location.href='mailto:contact@mediaghor.com'">অফিসিয়াল মেইল</button>
+        </div>
+      </div>
+      <p style="text-align: center; margin-top: 1.5rem; font-size: 0.9rem; color: #aac8ff;">
+        ⏰ সাপোর্ট সময়: সকাল ৯টা - রাত ১০টা (শুক্রবার ছুটির দিন)
+      </p>
+    </div>
+  </div>
+</main>
+{% include 'partial/footer.html' %}
+
+<!-- Floating Action Button (chat / contact) -->
+<button class="floating-btn" id="floatChatBtn" title="দ্রুত যোগাযোগ করুন">💬</button>
+<script>
+  (function() {
+    // Floating button click: opens a modal with contact info
+    const floatBtn = document.getElementById('floatChatBtn');
+    if (floatBtn) {
+        // Remove any existing event listeners to avoid duplicates
+        const newFloatBtn = floatBtn.cloneNode(true);
+        floatBtn.parentNode.replaceChild(newFloatBtn, floatBtn);
+        
+        newFloatBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            // Remove any existing modal first
+            let existingModal = document.querySelector('.dynamic-contact-modal');
+            if(existingModal) {
+                existingModal.remove();
+                return; // Toggle off - if already open, close it
+            }
+            
+            // Create modal container
+            const modalDiv = document.createElement('div');
+            modalDiv.className = 'dynamic-contact-modal';
+            modalDiv.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.85);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 99999;
+                backdrop-filter: blur(8px);
+                animation: fadeIn 0.2s ease;
+            `;
+            
+            // Modal content
+            const modalContent = document.createElement('div');
+            modalContent.style.cssText = `
+                background: linear-gradient(145deg, #0f1a2e, #0a1222);
+                border-radius: 32px;
+                max-width: 380px;
+                width: 90%;
+                padding: 2rem 1.8rem;
+                text-align: center;
+                border: 1px solid rgba(0, 255, 255, 0.5);
+                box-shadow: 0 25px 45px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 255, 255, 0.2);
+                animation: slideUp 0.25s ease;
+                margin: 20px;
+            `;
+            
+            modalContent.innerHTML = `
+                <div style="margin-bottom: 8px;">
+                    <span style="font-size: 48px;">💬</span>
+                </div>
+                <h3 style="color: #ffb347; margin-bottom: 20px; font-size: 1.6rem; font-weight: 700;">দ্রুত যোগাযোগ করুন</h3>
+                <div style="margin-bottom: 20px; text-align: center;">
+                    <p style="margin-bottom: 16px; display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap;">
+                        📱 WhatsApp/Phone: 
+                        <strong>
+                            <a href="tel:01736008374" style="color: #0ff; text-decoration: none; font-size: 1.1rem; border-bottom: 1px dashed #0ff;">01736008374</a>
+                        </strong>
+                    </p>
+                    <p style="margin-bottom: 16px; display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap;">
+                        ✉️ ব্যক্তিগত মেইল: 
+                        <strong>
+                            <a href="mailto:tanmoymondal1315@gmail.com" style="color: #0ff; text-decoration: none;">tanmoymondal1315@gmail.com</a>
+                        </strong>
+                    </p>
+                    <p style="margin-bottom: 24px; display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap;">
+                        🏢 অফিসিয়াল: 
+                        <strong>
+                            <a href="mailto:contact@mediaghor.com" style="color: #0ff; text-decoration: none;">contact@mediaghor.com</a>
+                        </strong>
+                    </p>
+                </div>
+                <button id="closeModalBtn" style="background: linear-gradient(135deg, #ff8c42, #ff6a2c); border: none; padding: 12px 28px; border-radius: 50px; color: white; font-size: 1rem; font-weight: 600; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 12px rgba(255, 140, 66, 0.3);">বন্ধ করুন</button>
+            `;
+            
+            modalDiv.appendChild(modalContent);
+            document.body.appendChild(modalDiv);
+            
+            // Add keyframe styles dynamically if not already added
+            if (!document.querySelector('#modal-keyframe-style')) {
+                const styleSheet = document.createElement('style');
+                styleSheet.id = 'modal-keyframe-style';
+                styleSheet.textContent = `
+                    @keyframes fadeIn {
+                        from { opacity: 0; }
+                        to { opacity: 1; }
+                    }
+                    @keyframes slideUp {
+                        from { 
+                            opacity: 0;
+                            transform: translateY(40px);
+                        }
+                        to { 
+                            opacity: 1;
+                            transform: translateY(0);
+                        }
+                    }
+                `;
+                document.head.appendChild(styleSheet);
+            }
+            
+            // Close button functionality
+            const closeBtn = document.getElementById('closeModalBtn');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    if (modalDiv && modalDiv.remove) {
+                        modalDiv.remove();
+                    }
+                });
+                
+                // Hover effect
+                closeBtn.addEventListener('mouseenter', function() {
+                    this.style.transform = 'scale(1.02)';
+                    this.style.boxShadow = '0 6px 18px rgba(255, 140, 66, 0.5)';
+                });
+                closeBtn.addEventListener('mouseleave', function() {
+                    this.style.transform = 'scale(1)';
+                    this.style.boxShadow = '0 4px 12px rgba(255, 140, 66, 0.3)';
+                });
+            }
+            
+            // Close when clicking outside the modal content
+            modalDiv.addEventListener('click', function(e) {
+                if (e.target === modalDiv) {
+                    modalDiv.remove();
+                }
+            });
+            
+            // Handle ESC key to close modal
+            function handleEscKey(e) {
+                if (e.key === 'Escape') {
+                    if (modalDiv && document.body.contains(modalDiv)) {
+                        modalDiv.remove();
+                    }
+                    document.removeEventListener('keydown', handleEscKey);
+                }
+            }
+            document.addEventListener('keydown', handleEscKey);
+            
+            // Clean up event listener when modal is removed
+            const observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    if (mutation.removedNodes.length) {
+                        mutation.removedNodes.forEach(function(node) {
+                            if (node === modalDiv) {
+                                document.removeEventListener('keydown', handleEscKey);
+                                observer.disconnect();
+                            }
+                        });
+                    }
+                });
+            });
+            observer.observe(document.body, { childList: true });
+        });
+    }
+
+    // Join now CTA button
+    const joinBtn = document.getElementById('joinNowBtn');
+    if(joinBtn) {
+        const newJoinBtn = joinBtn.cloneNode(true);
+        joinBtn.parentNode.replaceChild(newJoinBtn, joinBtn);
+        newJoinBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            alert("🎉 শীঘ্রই কোর্স এনরোলমেন্ট খুলবে! যোগাযোগ করুন: 01736008374 অথবা tanmoymondal1315@gmail.com");
+        });
+    }
+    
+    // Fee button action
+    const feeBtn = document.getElementById('feeEnrollBtn');
+    if(feeBtn) {
+        const newFeeBtn = feeBtn.cloneNode(true);
+        feeBtn.parentNode.replaceChild(newFeeBtn, feeBtn);
+        newFeeBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            alert("মাসিক ৩০০০ টাকায় ৬ মাসের কোর্স। পুরো প্যাকেজে ১৫,০০০ টাকা। ব্যাংক/বিকাশ/নগদ পেমেন্ট সুবিধা। বিস্তারিত জানতে কল করুন: 01736008374");
+        });
+    }
+
+    
+    // Additional safety: if floating button still doesn't work, create a fallback
+    // Check if button exists after DOM is fully loaded
+    window.addEventListener('load', function() {
+        const checkButton = document.getElementById('floatChatBtn');
+        if (!checkButton) {
+            console.warn("Floating button with id 'floatChatBtn' not found in DOM");
+        } else {
+            // Ensure button has proper cursor and styling
+            checkButton.style.cursor = 'pointer';
+            checkButton.style.position = 'fixed';
+            checkButton.style.bottom = '24px';
+            checkButton.style.right = '24px';
+            checkButton.style.zIndex = '9999';
+            checkButton.style.width = '56px';
+            checkButton.style.height = '56px';
+            checkButton.style.borderRadius = '50%';
+            checkButton.style.backgroundColor = '#ff8c42';
+            checkButton.style.border = 'none';
+            checkButton.style.boxShadow = '0 6px 20px rgba(0,0,0,0.3), 0 0 0 2px rgba(255,140,66,0.3)';
+            checkButton.style.fontSize = '28px';
+            checkButton.style.cursor = 'pointer';
+            checkButton.style.transition = 'transform 0.2s, box-shadow 0.2s';
+            checkButton.style.display = 'flex';
+            checkButton.style.alignItems = 'center';
+            checkButton.style.justifyContent = 'center';
+            
+            // Hover effect
+            checkButton.addEventListener('mouseenter', function() {
+                this.style.transform = 'scale(1.08)';
+                this.style.boxShadow = '0 10px 28px rgba(0,0,0,0.4), 0 0 0 3px rgba(255,140,66,0.5)';
+            });
+            checkButton.addEventListener('mouseleave', function() {
+                this.style.transform = 'scale(1)';
+                this.style.boxShadow = '0 6px 20px rgba(0,0,0,0.3), 0 0 0 2px rgba(255,140,66,0.3)';
+            });
+        }
+    });
+})();
+</script>
+
+</body>
+ {% include 'partial/course_join_form.html' %}
+ {% include 'partial/fee_details_modal.html' %}
+ {% include 'partial/app_download_modal.html' %}
+</html>

@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="bn">
+<head>
+    <!-- Essential Meta Tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>{{ library.title }} | Media Ghor</title>
+
+    <link rel="icon" type="image/png" href="{% static 'images/favicon/favicon-96x96.png' %}" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="{% static 'images/favicon/favicon.svg' %}" />
+    <link rel="shortcut icon" href="{% static 'images/favicon/favicon.ico' %}" />
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/favicon/apple-touch-icon.png' %}" />
+    <meta name="apple-mobile-web-app-title" content="Media Ghor" />
+    <link rel="manifest" href="{% static 'images/favicon/site.webmanifest' %}"/>
+
+
+    <meta name="description" content="{{ library.description|truncatechars:160 }} - প্রোগ্রামিং রিসোর্স, লাইব্রেরি গাইড এবং ব্যবহার নির্দেশিকা">
+    <meta name="keywords" content="{{ library.title }}, programming resource, code library, developer tools, python library, django resource">
+    <meta name="author" content="Media Ghor">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="{{ library.title }} | Media Ghor">
+    <meta property="og:description" content="{{ library.description|truncatechars:160 }}">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="Media Ghor">
+    <meta property="og:locale" content="bn_BD">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ library.title }}">
+    <meta name="twitter:description" content="{{ library.description|truncatechars:160 }}">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="{{ request.build_absolute_uri }}">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Modern CSS Reset & Base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', 'Hind Siliguri', system-ui, sans-serif;
+            background: #f5f7fb;
+            color: #111827;
+            min-height: 100vh;
+            line-height: 1.5;
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Main Container - Enhanced Spacing */
+        .detail-container {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 2.5rem 2rem;
+        }
+
+        /* Breadcrumb - Professional Styling */
+        .breadcrumb {
+            background: #ffffff;
+            border-bottom: 1px solid #eef2f6;
+            padding: 1rem 0;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+        }
+
+        .breadcrumb-content {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .breadcrumb-list {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.875rem;
+            color: #6b7280;
+            flex-wrap: wrap;
+        }
+
+        .breadcrumb-list a {
+            color: #3b82f6;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .breadcrumb-list a:hover {
+            color: #1d4ed8;
+            text-decoration: underline;
+        }
+
+        .breadcrumb-list i {
+            font-size: 0.75rem;
+            color: #9ca3af;
+        }
+
+        /* Main Layout - Enhanced Grid */
+        .detail-layout {
+            display: grid;
+            grid-template-columns: 1fr 360px;
+            gap: 2.5rem;
+        }
+
+        /* Main Content - Premium Card */
+        .main-content {
+            background: #ffffff;
+            border-radius: 1.5rem;
+            padding: 2.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02), 0 1px 2px rgba(0, 0, 0, 0.03);
+            border: 1px solid #f0f2f5;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .main-content:hover {
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Header Section - Enhanced Typography */
+        .resource-header {
+            margin-bottom: 2.5rem;
+            padding-bottom: 1.75rem;
+            border-bottom: 2px solid #f0f2f5;
+        }
+
+        .resource-title {
+            font-size: 2.75rem;
+            font-weight: 800;
+            color: #0a0c10;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .resource-meta {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            margin-top: 1.25rem;
+            padding-top: 1rem;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.625rem;
+            font-size: 0.875rem;
+            color: #6b7280;
+            background: #f9fafb;
+            padding: 0.375rem 0.875rem;
+            border-radius: 2rem;
+            transition: all 0.2s;
+        }
+
+        .meta-item i {
+            font-size: 0.875rem;
+            color: #9ca3af;
+        }
+
+        /* Enhanced Code Block - Modern Terminal Style */
+        .code-block {
+            background: linear-gradient(145deg, #0a0c15 0%, #0f111a 100%);
+            border-radius: 1.25rem;
+            padding: 1.75rem;
+            margin: 2rem 0 2.5rem 0;
+            border: 1px solid rgba(59, 130, 246, 0.15);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.25rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .code-title {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: #94a3b8;
+            font-size: 0.8125rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+        }
+
+        .code-dots {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .code-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            transition: transform 0.2s;
+        }
+
+        .code-dot.red { background: #ff5f56; box-shadow: 0 0 0 1px rgba(255, 95, 86, 0.2); }
+        .code-dot.yellow { background: #ffbd2e; box-shadow: 0 0 0 1px rgba(255, 189, 46, 0.2); }
+        .code-dot.green { background: #27c93f; box-shadow: 0 0 0 1px rgba(39, 201, 63, 0.2); }
+
+        .copy-btn {
+            background: rgba(59, 130, 246, 0.1);
+            color: #60a5fa;
+            border: 1px solid rgba(59, 130, 246, 0.25);
+            padding: 0.5rem 1.125rem;
+            border-radius: 0.625rem;
+            font-size: 0.8125rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            backdrop-filter: blur(4px);
+        }
+
+        .copy-btn:hover {
+            background: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .library-code {
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            font-size: 0.9375rem;
+            font-weight: 500;
+            color: #e2e8f0;
+            background: transparent;
+            padding: 0.75rem;
+            border-radius: 0.75rem;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+            line-height: 1.65;
+            letter-spacing: -0.2px;
+        }
+
+        .library-code code {
+            background: transparent;
+            padding: 0;
+        }
+
+        /* How To Use Section - Enhanced */
+        .how-to-use {
+            margin: 2.5rem 0 0 0;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 0.875rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+        }
+
+        .content-box {
+            background: #fafcff;
+            border-radius: 1.25rem;
+            padding: 1.75rem;
+            border: 1px solid #eef2f8;
+            transition: all 0.2s;
+        }
+
+        .content-box pre {
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            font-size: 1rem;
+            font-weight: 450;
+            color: #1f2a44;
+            line-height: 1.7;
+            white-space: pre-wrap;
+            word-break: break-word;
+            margin: 0;
+            background: transparent;
+        }
+
+        /* Sidebar - Premium Styling */
+        .sidebar {
+            position: sticky;
+            top: 2rem;
+            height: fit-content;
+        }
+
+        /* Info Card - Glassmorphism Style */
+        .info-card {
+            background: #ffffff;
+            border-radius: 1.25rem;
+            padding: 1.5rem;
+            margin-bottom: 1.75rem;
+            border: 1px solid #eef2f8;
+            transition: all 0.25s ease;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+        }
+
+        .info-card:hover {
+            border-color: #e2e8f0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+        }
+
+        .info-card-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 1.125rem;
+            display: flex;
+            align-items: center;
+            gap: 0.625rem;
+            letter-spacing: -0.2px;
+        }
+
+        .info-card-title i {
+            color: #3b82f6;
+            font-size: 1.125rem;
+        }
+
+        .info-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .info-list li {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.875rem 0;
+            border-bottom: 1px solid #f0f2f5;
+            font-size: 0.875rem;
+        }
+
+        .info-list li:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .info-value {
+            color: #111827;
+            font-weight: 600;
+        }
+
+        /* Quick Copy Button - Elevated */
+        .quick-copy {
+            background: linear-gradient(105deg, #10b981 0%, #059669 100%);
+            color: white;
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 1rem;
+            font-size: 0.9375rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.625rem;
+            margin-bottom: 1.75rem;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+        }
+
+        .quick-copy:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+            background: linear-gradient(105deg, #059669 0%, #047857 100%);
+        }
+
+        /* Description Text - ENHANCED FONT SIZE */
+        .description-text {
+            color: #2c3e50;
+            line-height: 1.7;
+            font-size: 1.0625rem;
+            font-weight: 450;
+            text-align: justify;
+            letter-spacing: -0.1px;
+        }
+
+        /* Recommended Section */
+        .recommended-section {
+            margin-top: 1.75rem;
+        }
+
+        .recommended-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.625rem;
+            color: #111827;
+        }
+
+        .recommended-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.875rem;
+        }
+
+        .recommended-item {
+            background: #ffffff;
+            padding: 1.125rem;
+            border-radius: 1rem;
+            border: 1px solid #eef2f8;
+            transition: all 0.25s ease;
+            text-decoration: none;
+            display: block;
+        }
+
+        .recommended-item:hover {
+            transform: translateX(6px);
+            border-color: #3b82f6;
+            box-shadow: 0 6px 14px rgba(59, 130, 246, 0.08);
+        }
+
+        .recommended-item-title {
+            font-weight: 700;
+            color: #111827;
+            font-size: 0.9375rem;
+            margin-bottom: 0.375rem;
+            line-height: 1.4;
+        }
+
+        .recommended-item-meta {
+            font-size: 0.75rem;
+            color: #6b7280;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Toast Notification - Premium */
+        .toast-notification {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+            color: white;
+            padding: 1rem 1.75rem;
+            border-radius: 1rem;
+            font-weight: 600;
+            font-size: 0.875rem;
+            z-index: 1000;
+            opacity: 0;
+            transition: all 0.35s cubic-bezier(0.34, 1.2, 0.64, 1);
+            box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.25);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            backdrop-filter: blur(8px);
+            background: rgba(17, 24, 39, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .toast-notification.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        /* Enhanced Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+            transition: background 0.2s;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Responsive Refinements */
+        @media (max-width: 1024px) {
+            .detail-layout {
+                grid-template-columns: 1fr 320px;
+                gap: 2rem;
+            }
+            
+            .resource-title {
+                font-size: 2.25rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .detail-container {
+                padding: 1.5rem;
+            }
+            
+            .detail-layout {
+                grid-template-columns: 1fr;
+                gap: 1.75rem;
+            }
+
+            .sidebar {
+                position: static;
+                order: 2;
+            }
+
+            .main-content {
+                order: 1;
+                padding: 1.75rem;
+            }
+
+            .resource-title {
+                font-size: 1.875rem;
+            }
+            
+            .description-text {
+                font-size: 1rem;
+            }
+            
+            .section-title {
+                font-size: 1.25rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .detail-container {
+                padding: 1rem;
+            }
+            
+            .main-content {
+                padding: 1.25rem;
+            }
+            
+            .resource-title {
+                font-size: 1.625rem;
+            }
+            
+            .code-block {
+                padding: 1.25rem;
+            }
+            
+            .library-code {
+                font-size: 0.8125rem;
+            }
+        }
+
+        /* Utility Classes */
+        .truncate {
+            max-width: 300px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        @media (max-width: 640px) {
+            .truncate {
+                max-width: 180px;
+            }
+        }
+        
+        /* Focus States for Accessibility */
+        button:focus-visible, a:focus-visible {
+            outline: 2px solid #3b82f6;
+            outline-offset: 2px;
+            border-radius: 4px;
+        }
+        
+        /* Code Selection Styling */
+        .library-code::selection {
+            background: #3b82f6;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+{% include 'partial/navbar.html' %}
+
+<!-- Breadcrumb - Professional -->
+<div class="breadcrumb">
+    <div class="breadcrumb-content">
+        <div class="breadcrumb-list">
+            <a href="{% url 'home' %}"><i class="fas fa-home"></i> হোম</a>
+            <i class="fas fa-chevron-right"></i>
+            <a href="{% url 'resources:library_list' %}">লাইব্রেরি</a>
+            <i class="fas fa-chevron-right"></i>
+            <span class="truncate" style="color: #4b5563; font-weight: 500;">{{ library.title }}</span>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content -->
+<main>
+    <div class="detail-container">
+        <div class="detail-layout">
+            <!-- Left Column - Main Content -->
+            <div class="main-content">
+                <!-- Header -->
+                <div class="resource-header">
+                    <h1 class="resource-title">{{ library.title }}</h1>
+                    <div class="resource-meta">
+                        <span class="meta-item">
+                            <i class="far fa-calendar-alt"></i>
+                            প্রকাশ: {{ library.created_at|date:"j F, Y" }}
+                        </span>
+                        <span class="meta-item">
+                            <i class="far fa-clock"></i>
+                            সর্বশেষ আপডেট: {{ library.updated_at|date:"j F, Y" }}
+                        </span>
+                        {% if library.is_active %}
+                        <span class="meta-item" style="background: #ecfdf5; color: #059669;">
+                            <i class="fas fa-check-circle"></i>
+                            সক্রিয়
+                        </span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Code Block - Terminal Style -->
+                <div class="code-block">
+                    <div class="code-header">
+                        <div class="code-title">
+                            <div class="code-dots">
+                                <div class="code-dot red"></div>
+                                <div class="code-dot yellow"></div>
+                                <div class="code-dot green"></div>
+                            </div>
+                            <span><i class="far fa-file-code"></i> resource.txt</span>
+                        </div>
+                        <button class="copy-btn" data-link="{{ library.library_link }}" data-library-id="{{ library.id }}">
+                            <i class="far fa-copy"></i>
+                            কপি করুন
+                        </button>
+                    </div>
+                    <pre class="library-code"><code>{{ library.library_link|default:"লিংক পাওয়া যায়নি" }}</code></pre>
+                </div>
+
+                <!-- How To Use Section -->
+                <div class="how-to-use">
+                    <div class="section-title">
+                        <div class="section-icon">
+                            <i class="fas fa-play"></i>
+                        </div>
+                        <h2>How To Use</h2>
+                    </div>
+                    <div class="content-box">
+                        <pre>{{ library.how_to_use|default:library.description|safe }}</pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column - Sidebar -->
+            <div class="sidebar">
+                <!-- Quick Copy Button - Premium -->
+                <button class="quick-copy" data-link="{{ library.library_link }}" data-library-id="{{ library.id }}">
+                    <i class="fas fa-bolt"></i>
+                    দ্রুত কপি করুন
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+
+                <!-- Resource Info Card -->
+                <div class="info-card">
+                    <div class="info-card-title">
+                        <i class="fas fa-info-circle"></i>
+                        রিসোর্স তথ্য
+                    </div>
+                    <ul class="info-list">
+                        <li>
+                            <span class="info-label">প্রথম প্রকাশ</span>
+                            <span class="info-value">{{ library.created_at|date:"j F, Y" }}</span>
+                        </li>
+                        <li>
+                            <span class="info-label">সর্বশেষ আপডেট</span>
+                            <span class="info-value">{{ library.updated_at|date:"j F, Y" }}</span>
+                        </li>
+                        <li>
+                            <span class="info-label">স্ট্যাটাস</span>
+                            <span class="info-value">
+                                {% if library.is_active %}
+                                    <span style="color: #10b981; display: inline-flex; align-items: center; gap: 0.25rem;"><i class="fas fa-circle" style="font-size: 0.5rem;"></i> সক্রিয়</span>
+                                {% else %}
+                                    <span style="color: #ef4444; display: inline-flex; align-items: center; gap: 0.25rem;"><i class="fas fa-circle" style="font-size: 0.5rem;"></i> নিষ্ক্রিয়</span>
+                                {% endif %}
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Description Card - ENHANCED TEXT SIZE -->
+                {% if library.description %}
+                <div class="info-card">
+                    <div class="info-card-title">
+                        <i class="fas fa-align-left"></i>
+                        বিবরণ
+                    </div>
+                    <div class="description-text">
+                        {{ library.description }}
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Recommended Resources -->
+                {% if recommended_libraries %}
+                <div class="recommended-section">
+                    <div class="recommended-title">
+                        <i class="fas fa-fire" style="color: #f97316;"></i>
+                        সুপারিশকৃত রিসোর্স
+                    </div>
+                    <div class="recommended-list">
+                        {% for rec in recommended_libraries %}
+                        <a href="{% url 'resources:library_detail' id=rec.id %}" class="recommended-item">
+                            <div class="recommended-item-title">{{ rec.title }}</div>
+                            <div class="recommended-item-meta">
+                                <i class="far fa-calendar-alt"></i>
+                                {{ rec.created_at|date:"d M, Y" }}
+                            </div>
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Footer -->
+{% include 'partial/footer.html' %}
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Enhanced copy functionality with analytics tracking
+    const copyButtons = document.querySelectorAll('.copy-btn, .quick-copy');
+    
+    copyButtons.forEach(button => {
+        button.addEventListener('click', async function(e) {
+            e.preventDefault();
+            const link = this.getAttribute('data-link');
+            const libraryId = this.getAttribute('data-library-id');
+            
+            if (!link || link === 'লিংক পাওয়া যায়নি') {
+                showToast('⚠️ কপি করার মতো বৈধ লিংক নেই', 'error');
+                return;
+            }
+            
+            try {
+                // Modern clipboard API with fallback
+                await navigator.clipboard.writeText(link);
+                showToast('✅ সফলভাবে কপি করা হয়েছে!', 'success');
+                
+                // Track copy event (optional analytics placeholder)
+                if (libraryId && window.gtag) {
+                    gtag('event', 'copy_resource', {
+                        'event_category': 'Resource',
+                        'event_label': libraryId,
+                        'value': 1
+                    });
+                }
+                
+                // Visual feedback with animation
+                const originalText = this.innerHTML;
+                const originalWidth = this.offsetWidth;
+                
+                if (this.classList.contains('quick-copy')) {
+                    this.innerHTML = '<i class="fas fa-check-circle"></i> কপি হয়েছে! <i class="fas fa-check"></i>';
+                } else {
+                    this.innerHTML = '<i class="fas fa-check"></i> কপি হয়েছে!';
+                }
+                
+                setTimeout(() => {
+                    this.innerHTML = originalText;
+                }, 2000);
+                
+            } catch (err) {
+                console.error('Copy failed:', err);
+                // Fallback for older browsers
+                fallbackCopy(link);
+            }
+        });
+    });
+    
+    // Fallback copy method
+    function fallbackCopy(text) {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        document.body.appendChild(textarea);
+        textarea.select();
+        const success = document.execCommand('copy');
+        document.body.removeChild(textarea);
+        
+        if (success) {
+            showToast('✅ সফলভাবে কপি করা হয়েছে!', 'success');
+        } else {
+            showToast('❌ কপি করতে ব্যর্থ হয়েছে', 'error');
+        }
+    }
+    
+    // Enhanced Toast notification with animations
+    function showToast(message, type = 'success') {
+        const existingToast = document.querySelector('.toast-notification');
+        if (existingToast) {
+            existingToast.remove();
+        }
+        
+        const toast = document.createElement('div');
+        toast.className = 'toast-notification';
+        
+        let icon = 'fa-check-circle';
+        let gradient = 'rgba(17, 24, 39, 0.95)';
+        if (type === 'error') {
+            icon = 'fa-exclamation-triangle';
+            gradient = 'rgba(220, 38, 38, 0.95)';
+            toast.style.background = 'rgba(220, 38, 38, 0.95)';
+            toast.style.borderColor = 'rgba(239, 68, 68, 0.3)';
+        } else {
+            toast.style.background = 'rgba(16, 185, 129, 0.95)';
+            toast.style.borderColor = 'rgba(16, 185, 129, 0.3)';
+        }
+        
+        toast.innerHTML = `
+            <i class="fas ${icon}" style="font-size: 1.125rem;"></i>
+            <span style="font-weight: 500;">${message}</span>
+        `;
+        
+        document.body.appendChild(toast);
+        
+        requestAnimationFrame(() => {
+            toast.classList.add('show');
+        });
+        
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => toast.remove(), 350);
+        }, 2800);
+    }
+    
+    // Smooth scroll enhancement for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            const href = this.getAttribute('href');
+            if (href && href !== '#') {
+                e.preventDefault();
+                const target = document.querySelector(href);
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            }
+        });
+    });
+    
+    // Add keyboard shortcut for copy (Ctrl/Cmd + C when focused on code)
+    const codeBlock = document.querySelector('.library-code');
+    if (codeBlock) {
+        codeBlock.addEventListener('keydown', async (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'c') {
+                e.preventDefault();
+                const link = document.querySelector('.copy-btn')?.getAttribute('data-link');
+                if (link) {
+                    await navigator.clipboard.writeText(link);
+                    showToast('✅ কপি করা হয়েছে (শর্টকাট)', 'success');
+                }
+            }
+        });
+        codeBlock.setAttribute('tabindex', '0');
+        codeBlock.setAttribute('aria-label', 'কোড ব্লক, কপি করতে Ctrl+C ব্যবহার করুন');
+    }
+});
+</script>
+
+<!-- Structured Data - Enhanced -->
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "headline": "{{ library.title }}",
+    "description": "{{ library.description|truncatechars:200 }}",
+    "author": {
+        "@type": "Organization",
+        "name": "মিডিয়া ঘর"
+    },
+    "datePublished": "{{ library.created_at|date:'Y-m-d' }}",
+    "dateModified": "{{ library.updated_at|date:'Y-m-d' }}",
+    "mainEntityOfPage": "{{ request.build_absolute_uri }}",
+    "keywords": "programming, library, developer resource"
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,181 @@
+<!-- Simple Library Card Component -->
+<style>
+  .library-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+    padding: 1rem;
+  }
+
+  .library-card {
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
+    transition: all 0.3s ease;
+    border: 1px solid #e2e8f0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .library-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
+    border-color: #cbd5e1;
+  }
+
+  /* Card Header */
+  .library-card-header {
+    margin-bottom: 1rem;
+  }
+
+  .library-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1e293b;
+    line-height: 1.4;
+    margin-bottom: 0.5rem;
+  }
+
+  /* Card Body */
+  .library-card-body {
+    margin: 1rem 0;
+  }
+
+  .description-section {
+    background: #f1f5f9;
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .description-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #475569;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .description-content {
+    font-size: 0.875rem;
+    color: #0f172a;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Card Footer */
+  .library-card-footer {
+    margin-top: 1rem;
+  }
+
+  .use-guide-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.625rem 1rem;
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: white;
+    font-weight: 600;
+    font-size: 0.875rem;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+  }
+
+  .use-guide-btn:hover {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+  }
+
+  .use-guide-btn:active {
+    transform: translateY(0);
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .library-grid {
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1rem;
+      padding: 0.75rem;
+    }
+
+    .library-card {
+      padding: 1.25rem;
+    }
+
+    .library-title {
+      font-size: 1.125rem;
+    }
+
+    .use-guide-btn {
+      padding: 0.5rem 0.875rem;
+      font-size: 0.8125rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .library-grid {
+      grid-template-columns: 1fr;
+      gap: 0.875rem;
+    }
+
+    .library-card {
+      padding: 1rem;
+    }
+  }
+</style>
+
+<!-- Library Cards Grid -->
+<div class="library-grid">
+  {% for library in libraries %}
+    <div class="library-card" data-library-id="{{ library.id }}">
+      <!-- Card Header -->
+      <div class="library-card-header">
+        <h3 class="library-title">{{ library.title }}</h3>
+      </div>
+
+      <!-- Card Body -->
+      <div class="library-card-body">
+        {% if library.description %}
+          <div class="description-section">
+            <div class="description-label">
+              <i class="fas fa-info-circle"></i>
+              <span>বিবরণ</span>
+            </div>
+            <div class="description-content">
+              {{ library.description|truncatechars:120 }}
+            </div>
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- Card Footer -->
+      <div class="library-card-footer">
+        <a href="{% url 'resources:library_detail' id=library.id %}" class="use-guide-btn">
+          <i class="fas fa-book-open"></i>
+          বিস্তারিত দেখুন
+        </a>
+      </div>
+    </div>
+  {% empty %}
+    <div class="library-card" style="grid-column: 1/-1; text-align: center;">
+      <div class="library-card-header">
+        <h3 class="library-title">কোন লাইব্রেরি পাওয়া যায়নি</h3>
+        <p class="description-content">পরে আবার চেক করুন</p>
+      </div>
+    </div>
+  {% endfor %}
+</div>

@@ -1,0 +1,592 @@
+<!-- App Download Modal Component -->
+<style>
+  .app-download-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.92);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 10004;
+    backdrop-filter: blur(10px);
+    animation: fadeInModal 0.3s ease;
+  }
+
+  .app-download-modal.active {
+    display: flex;
+  }
+
+  .app-download-container {
+    background: linear-gradient(145deg, #0f1a2e, #0a1222);
+    border-radius: 40px;
+    max-width: 550px;
+    width: 90%;
+    padding: 2.5rem;
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6), 0 0 40px rgba(0, 255, 255, 0.2);
+    animation: slideUpForm 0.35s ease;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    text-align: center;
+  }
+
+  .close-app-modal-btn {
+    position: absolute;
+    top: 1.2rem;
+    right: 1.2rem;
+    background: rgba(255, 140, 66, 0.2);
+    border: 1px solid #ff8c42;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    font-size: 24px;
+    color: #ff8c42;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+  }
+
+  .close-app-modal-btn:hover {
+    background: rgba(255, 140, 66, 0.4);
+    transform: rotate(90deg);
+  }
+
+  .app-icon-animation {
+    font-size: 5rem;
+    margin-bottom: 1rem;
+    animation: bounce 2s infinite;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  .app-download-container h2 {
+    color: #0ff;
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+  }
+
+  .app-subtitle {
+    color: #ffb347;
+    font-size: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .development-status {
+    background: linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(255, 140, 66, 0.1));
+    border-radius: 24px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    border: 1px solid rgba(0, 255, 255, 0.3);
+  }
+
+  .progress-bar-container {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 30px;
+    height: 12px;
+    margin: 1rem 0;
+    overflow: hidden;
+  }
+
+  .progress-bar {
+    background: linear-gradient(90deg, #0ff, #ff8c42);
+    width: 75%;
+    height: 100%;
+    border-radius: 30px;
+    animation: progressPulse 1.5s ease-in-out infinite;
+    position: relative;
+  }
+
+  @keyframes progressPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+  }
+
+  .progress-text {
+    display: flex;
+    justify-content: space-between;
+    color: #aac8ff;
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+  }
+
+  .features-list {
+    text-align: left;
+    margin: 1.5rem 0;
+  }
+
+  .features-list h3 {
+    color: #ffb347;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+  }
+
+  .feature-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    border-radius: 12px;
+    transition: all 0.3s;
+  }
+
+  .feature-item:hover {
+    background: rgba(0, 255, 255, 0.05);
+    transform: translateX(5px);
+  }
+
+  .feature-icon {
+    font-size: 1.5rem;
+    min-width: 40px;
+  }
+
+  .feature-text {
+    flex: 1;
+    color: #ccd9ff;
+  }
+
+  .feature-text strong {
+    color: #0ff;
+  }
+
+  .notification-form {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 24px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    border: 1px solid rgba(0, 255, 255, 0.2);
+  }
+
+  .notification-form h3 {
+    color: #ffb347;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+  }
+
+  .email-input-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .email-input-group input {
+    flex: 1;
+    padding: 0.8rem 1rem;
+    background: rgba(15, 30, 60, 0.8);
+    border: 1px solid rgba(0, 255, 255, 0.4);
+    border-radius: 12px;
+    color: #f0f3ff;
+    font-family: inherit;
+    font-size: 0.95rem;
+  }
+
+  .email-input-group input:focus {
+    outline: none;
+    border-color: #0ff;
+    box-shadow: 0 0 12px rgba(0, 255, 255, 0.3);
+  }
+
+  .notify-btn {
+    background: linear-gradient(95deg, #ff8c42, #ff4d00);
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 12px;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-family: inherit;
+  }
+
+  .notify-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 140, 66, 0.4);
+  }
+
+  .notify-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .success-message {
+    background: rgba(0, 255, 0, 0.1);
+    border-left: 3px solid #0f0;
+    padding: 0.8rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+    color: #0f0;
+    font-size: 0.9rem;
+    display: none;
+  }
+
+  .success-message.show {
+    display: block;
+    animation: slideDown 0.3s ease;
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .estimated-date {
+    background: rgba(0, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 1rem;
+    margin: 1rem 0;
+    text-align: center;
+  }
+
+  .estimated-date .date {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #0ff;
+    margin: 0.5rem 0;
+  }
+
+  .app-store-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .store-button {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    padding: 0.8rem 1.5rem;
+    border-radius: 12px;
+    color: #f0f3ff;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s;
+    cursor: pointer;
+  }
+
+  .store-button:hover {
+    background: rgba(0, 255, 255, 0.1);
+    transform: translateY(-2px);
+    border-color: #0ff;
+  }
+
+  .store-button.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .store-button.disabled:hover {
+    transform: none;
+  }
+
+  @media (max-width: 600px) {
+    .app-download-container {
+      padding: 2rem 1.5rem;
+    }
+
+    .app-download-container h2 {
+      font-size: 1.6rem;
+    }
+
+    .email-input-group {
+      flex-direction: column;
+    }
+
+    .feature-item {
+      padding: 0.3rem;
+    }
+  }
+</style>
+
+<div id="appDownloadModal" class="app-download-modal">
+  <div class="app-download-container">
+    <button class="close-app-modal-btn" id="closeAppModalBtn">&times;</button>
+    
+    <div class="app-icon-animation">
+      📱🚀
+    </div>
+    
+    <h2>মিডিয়া ঘর অ্যাপ</h2>
+    <div class="app-subtitle">শীঘ্রই আসছে! আপনার শেখার অভিজ্ঞতা হবে আরও সহজ ও মজাদার</div>
+
+    <div class="development-status">
+      <h3 style="color: #ffb347; margin-bottom: 0.5rem;">🔨 উন্নয়ন অবস্থা</h3>
+      <div class="progress-bar-container">
+        <div class="progress-bar"></div>
+      </div>
+      <div class="progress-text">
+        <span>✅ ডিজাইন ও প্ল্যানিং</span>
+        <span>🚧 ডেভেলপমেন্ট চলছে</span>
+        <span>📱 টেস্টিং শীঘ্রই</span>
+      </div>
+      <p style="margin-top: 1rem; color: #aac8ff; font-size: 0.9rem;">
+        আমরা আপাতত অ্যাপটি তৈরি করছি যাতে আপনার শেখার অভিজ্ঞতা আরও উন্নত হয়। 
+        অ্যাপটি লঞ্চ হওয়ার সাথে সাথেই আমরা আপনাকে জানিয়ে দেবো!
+      </p>
+    </div>
+
+    <div class="features-list">
+      <h3>📱 অ্যাপে যা পাচ্ছেন:</h3>
+      <div class="feature-item">
+        <div class="feature-icon">🎥</div>
+        <div class="feature-text"><strong>ভিডিও রেকর্ডিং</strong> - যেকোনো সময় ক্লাস দেখুন</div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">📢</div>
+        <div class="feature-text"><strong>নোটিফিকেশন</strong> - ক্লাস, অ্যাসাইনমেন্টের আপডেট</div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">📝</div>
+        <div class="feature-text"><strong>অ্যাসাইনমেন্ট জমা</strong> - সহজে অ্যাসাইনমেন্ট সাবমিট করুন</div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">🔗</div>
+        <div class="feature-text"><strong>Zoom/Meets লিংক</strong> - ক্লাসের লিংক পাবেন এক জায়গায়</div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">📚</div>
+        <div class="feature-text"><strong>লাইব্রেরি</strong> - সকল কোর্স মেটেরিয়াল একসাথে</div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">💬</div>
+        <div class="feature-text"><strong>লাইভ চ্যাট</strong> - শিক্ষক ও শিক্ষার্থীদের সাথে যোগাযোগ</div>
+      </div>
+    </div>
+
+    <div class="estimated-date">
+      <span>🎯 লক্ষ্য লঞ্চ তারিখ:</span>
+      <div class="date">এপ্রিল ২০২৬</div>
+      <span style="font-size: 0.85rem; color: #aac8ff;">(আশা করি খুব শীঘ্রই!)</span>
+    </div>
+
+    <div class="notification-form">
+      <h3>📧 অ্যাপ লঞ্চের খবর পেতে ইমেইল দিন</h3>
+      <p style="font-size: 0.85rem; color: #aac8ff; margin-bottom: 1rem;">
+        অ্যাপটি লঞ্চ হওয়ার সাথে সাথেই আমরা আপনাকে ইমেইলে জানিয়ে দেবো!
+      </p>
+      <div class="email-input-group">
+        <input type="email" id="appNotificationEmail" placeholder="আপনার ইমেইল ঠিকানা" required>
+        <button class="notify-btn" id="notifyMeBtn">নোটিফিকেশন পেতে চাই</button>
+      </div>
+      <div id="notificationSuccessMsg" class="success-message">
+        ✅ ধন্যবাদ! অ্যাপ লঞ্চের খবর আমরা আপনার ইমেইলে পাঠিয়ে দেবো।
+      </div>
+    </div>
+
+    <div class="app-store-buttons">
+      <div class="store-button disabled">
+        <span>🍎</span> App Store (শীঘ্রই)
+      </div>
+      <div class="store-button disabled">
+        <span>📱</span> Google Play (শীঘ্রই)
+      </div>
+    </div>
+
+    <p style="margin-top: 1.5rem; font-size: 0.8rem; color: #6c7a9e;">
+      ⚡ অ্যাপটি তৈরি হচ্ছে আপনার জন্য। ধৈর্য ধরে অপেক্ষা করুন। ভালোবাসায়, মিডিয়া ঘর টিম 💙
+    </p>
+  </div>
+</div>
+
+<!-- Inside the app-download-modal.html, update the notification script -->
+<script>
+(function() {
+  // Wait for DOM to be fully loaded
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAppModal);
+  } else {
+    initAppModal();
+  }
+
+  function initAppModal() {
+    // Find all elements that might trigger the app modal
+    const triggerElements = document.querySelectorAll('.app-badge');
+    const appModal = document.getElementById('appDownloadModal');
+    const closeAppBtn = document.getElementById('closeAppModalBtn');
+    const notifyBtn = document.getElementById('notifyMeBtn');
+    const emailInput = document.getElementById('appNotificationEmail');
+    const successMsg = document.getElementById('notificationSuccessMsg');
+    
+    // Function to get CSRF token from cookies
+    function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
+    }
+    
+    // Function to open app modal
+    function openAppModal(e) {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      if (appModal) {
+        appModal.classList.add('active');
+        // Reset notification form when opening
+        if (emailInput) emailInput.value = '';
+        if (successMsg) successMsg.classList.remove('show');
+      }
+    }
+    
+    // Function to close app modal
+    function closeAppModal() {
+      if (appModal) {
+        appModal.classList.remove('active');
+      }
+    }
+    
+    // Add click event to all app badges
+    if (triggerElements && triggerElements.length > 0) {
+      triggerElements.forEach(badge => {
+        // Clone and replace to avoid duplicate listeners
+        const newBadge = badge.cloneNode(true);
+        badge.parentNode.replaceChild(newBadge, badge);
+        
+        newBadge.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          openAppModal(e);
+        });
+        
+        // Add cursor pointer to make it clear it's clickable
+        newBadge.style.cursor = 'pointer';
+      });
+    }
+    
+    // Close button functionality
+    if (closeAppBtn) {
+      closeAppBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        closeAppModal();
+      });
+    }
+    
+    // Close when clicking outside
+    if (appModal) {
+      appModal.addEventListener('click', function(e) {
+        if (e.target === appModal) {
+          closeAppModal();
+        }
+      });
+    }
+    
+    // Handle ESC key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && appModal && appModal.classList.contains('active')) {
+        closeAppModal();
+      }
+    });
+    
+    // Handle notification subscription with AJAX
+    if (notifyBtn && emailInput) {
+      notifyBtn.addEventListener('click', async function(e) {
+        e.preventDefault();
+        
+        const email = emailInput.value.trim();
+        
+        // Validate email
+        if (!email) {
+          alert('দয়া করে আপনার ইমেইল ঠিকানা দিন');
+          emailInput.focus();
+          return;
+        }
+        
+        const emailRegex = /^[^\s@]+@([^\s@]+\.)+[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+          alert('দয়া করে একটি বৈধ ইমেইল ঠিকানা দিন');
+          emailInput.focus();
+          return;
+        }
+        
+        // Show loading state
+        notifyBtn.disabled = true;
+        notifyBtn.textContent = 'পাঠানো হচ্ছে...';
+        
+        try {
+          // Send AJAX request to backend
+          const response = await fetch('/users/subscribe-app/', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': getCookie('csrftoken'),
+              'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: JSON.stringify({ email: email })
+          });
+          
+          const data = await response.json();
+          
+          if (response.ok && data.success) {
+            // Show success message
+            if (successMsg) {
+              successMsg.textContent = `✅ ${data.message}`;
+              successMsg.classList.add('show');
+            }
+            
+            // Clear input
+            emailInput.value = '';
+            
+            // Auto-hide success message after 5 seconds
+            setTimeout(() => {
+              if (successMsg) {
+                successMsg.classList.remove('show');
+              }
+            }, 5000);
+          } else {
+            // Show error message
+            alert(data.message || 'দুঃখিত, কিছু সমস্যা হয়েছে। আবার চেষ্টা করুন।');
+          }
+        } catch (error) {
+          console.error('Subscription error:', error);
+          alert('নেটওয়ার্ক সমস্যার কারণে সাবস্ক্রাইব করা যায়নি। ইন্টারনেট সংযোগ চেক করে আবার চেষ্টা করুন।');
+        } finally {
+          // Reset button
+          notifyBtn.disabled = false;
+          notifyBtn.textContent = 'নোটিফিকেশন পেতে চাই';
+        }
+      });
+    }
+    
+    // Add enter key support for email input
+    if (emailInput) {
+      emailInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          if (notifyBtn) {
+            notifyBtn.click();
+          }
+        }
+      });
+    }
+  }
+})();
+</script>

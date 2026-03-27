@@ -1,0 +1,678 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Resources And Library | Media Ghor</title>
+
+  <link rel="icon" type="image/png" href="{% static 'images/favicon/favicon-96x96.png' %}" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="{% static 'images/favicon/favicon.svg' %}" />
+  <link rel="shortcut icon" href="{% static 'images/favicon/favicon.ico' %}" />
+  <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/favicon/apple-touch-icon.png' %}" />
+  <meta name="apple-mobile-web-app-title" content="Media Ghor" />
+  <link rel="manifest" href="{% static 'images/favicon/site.webmanifest' %}"/>
+
+  <meta name="description" content="Media Ghor Library: বাংলায় পাইথন, জ্যাঙ্গো, ওয়েব ডেভেলপমেন্ট, ডাটাবেস ও ফ্রিল্যান্সিং-এর সর্বশেষ ও প্রিমিয়াম রিসোর্স। টিউটোরিয়াল, গাইড, প্র্যাকটিক্যাল কন্টেন্ট এক জায়গায়।">
+  <meta name="keywords" content="Python resources, Django resources, Web development resources, Programming library, Media Ghor library, পাইথন রিসোর্স, জ্যাঙ্গো রিসোর্স, ওয়েব ডেভেলপমেন্ট রিসোর্স, মিডিয়া ঘর লাইব্রেরি, ফ্রিল্যান্সিং টিপস">
+  <meta name="author" content="Media Ghor">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="মিডিয়া ঘর লাইব্রেরি | প্রোগ্রামিং রিসোর্সের বিশাল ভাণ্ডার">
+  <meta property="og:description" content="পাইথন, জ্যাঙ্গো, ডাটাবেস, ফ্রিল্যান্সিং সহ সকল প্রোগ্রামিং রিসোর্স বাংলায়। শিখুন, এক্সপ্লোর করুন, ক্যারিয়ার গড়ুন।">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="bn_BD">
+  <meta property="og:url" content="{{ request.build_absolute_uri }}">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="মিডিয়া ঘর লাইব্রেরি - প্রিমিয়াম প্রোগ্রামিং রিসোর্স">
+  <meta name="twitter:description" content="বাংলায় প্রোগ্রামিং শেখার সকল রিসোর্স। পাইথন, জ্যাঙ্গো, ওয়েব ডেভেলপমেন্ট এবং আরও অনেক কিছু।">
+  <link rel="canonical" href="{{ request.build_absolute_uri }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', 'Hind Siliguri', 'Noto Sans Bengali', system-ui, -apple-system, sans-serif;
+      background: #f7f9fc;
+      color: #0f172a;
+      min-height: 100vh;
+      scroll-behavior: smooth;
+      /* REMOVED any default margin/padding that could cause extra space */
+      margin: 0;
+      padding: 0;
+    }
+
+    /* ========== CUSTOM SCROLLBAR ========== */
+    ::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #eef2ff;
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(135deg, #818cf8, #a855f7);
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(135deg, #6366f1, #9333ea);
+    }
+
+    /* ========== MAIN CONTAINER - NO TOP MARGIN/PADDING BY DEFAULT ========== */
+    .resources-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      /* IMPORTANT: removed default top padding/margin, now controlled by dynamic JS but we start clean */
+      padding: 0 2rem 3rem;
+      /* No top padding or margin */
+    }
+
+    /* ========== HERO SECTION - REDUCED SIZE, COMPACT & CLEAN ========== */
+    .resources-header {
+      position: relative;
+      text-align: center;
+      /* Dramatically reduced padding: was 3rem 2rem, now compact 1.2rem 1.5rem */
+      padding: 1.2rem 1.5rem;
+      margin-bottom: 1.8rem; /* reduced bottom margin from 3rem to 1.8rem */
+      background: linear-gradient(125deg, #0f172a 0%, #1e1b4b 45%, #2d2a5e 100%);
+      border-radius: 1.5rem; /* slightly smaller radius */
+      color: white;
+      overflow: hidden;
+      box-shadow: 0 12px 30px -12px rgba(0, 0, 0, 0.2), 0 2px 6px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
+    }
+
+    .resources-header::before {
+      content: '';
+      position: absolute;
+      top: -30%;
+      left: -20%;
+      width: 140%;
+      height: 140%;
+      background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0) 70%);
+      pointer-events: none;
+    }
+
+    /* Smaller heading */
+    .resources-header h1 {
+      font-size: 2rem; /* reduced from 3rem */
+      font-weight: 800;
+      margin-bottom: 0.6rem; /* reduced spacing */
+      letter-spacing: -0.02em;
+      background: linear-gradient(120deg, #ffffff, #c7d2fe, #e0e7ff);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .resources-header h1 i {
+      background: none;
+      background-clip: unset;
+      -webkit-background-clip: unset;
+      color: #facc15;
+      text-shadow: 0 0 6px rgba(250,204,21,0.5);
+      margin-right: 0.4rem;
+      font-size: 1.8rem;
+    }
+
+    /* Reduced paragraph font size and margin */
+    .resources-header p {
+      font-size: 0.95rem; /* reduced from 1.2rem */
+      opacity: 0.92;
+      max-width: 650px;
+      margin: 0 auto;
+      font-weight: 450;
+      line-height: 1.5;
+    }
+
+    /* Badge row smaller */
+    .resources-header div[style*="margin-top"] {
+      margin-top: 0.7rem !important;
+    }
+    .resources-header span {
+      font-size: 0.7rem !important;
+      padding: 0.2rem 0.8rem !important;
+    }
+
+    /* ========== SEARCH SECTION ========== */
+    .search-section {
+      margin-bottom: 1.5rem; /* reduced from 2rem */
+    }
+    .search-box {
+      max-width: 620px;
+      margin: 0 auto;
+      position: relative;
+      transition: all 0.2s;
+    }
+    .search-input {
+      width: 100%;
+      padding: 0.9rem 3rem 0.9rem 1.5rem; /* slightly compact */
+      font-size: 0.95rem;
+      border: 2px solid #e2e8f0;
+      border-radius: 2rem;
+      background: white;
+      transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+      font-family: inherit;
+      font-weight: 500;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+    }
+    .search-input:focus {
+      outline: none;
+      border-color: #8b5cf6;
+      box-shadow: 0 8px 20px -5px rgba(139, 92, 246, 0.2), 0 0 0 3px rgba(139,92,246,0.1);
+      transform: scale(1.01);
+    }
+    .search-icon {
+      position: absolute;
+      right: 1.3rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #94a3b8;
+      font-size: 1.1rem;
+      pointer-events: none;
+    }
+    .search-clear {
+      position: absolute;
+      right: 3.2rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #94a3b8;
+      cursor: pointer;
+      display: none;
+      font-size: 1rem;
+      transition: color 0.2s;
+      background: white;
+      padding: 0 0.2rem;
+    }
+    .search-clear:hover {
+      color: #ef4444;
+    }
+
+    /* results info */
+    .results-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.8rem; /* slightly reduced */
+      padding: 0.5rem 1rem;
+      background: #ffffffcc;
+      backdrop-filter: blur(4px);
+      border-radius: 2rem;
+      border: 1px solid #eef2ff;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+    }
+    .results-count {
+      font-size: 0.85rem;
+      color: #334155;
+      font-weight: 500;
+      background: #f1f5f9;
+      padding: 0.2rem 1rem;
+      border-radius: 2rem;
+    }
+    .results-count strong {
+      color: #7c3aed;
+      font-weight: 700;
+    }
+    .reset-search {
+      background: #f1f5f9;
+      padding: 0.3rem 1rem;
+      border-radius: 2rem;
+      font-weight: 600;
+      font-size: 0.8rem;
+      transition: all 0.2s;
+    }
+    .reset-search:hover {
+      background: #eef2ff;
+      color: #4f46e5;
+      transform: translateY(-1px);
+    }
+
+    /* ========== LIBRARY GRID (professional cards) ========== */
+    .library-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 1.8rem; /* slightly reduced gap */
+      margin-bottom: 2.5rem;
+    }
+
+    /* card style */
+    .library-card {
+      background: #ffffff;
+      border-radius: 1.3rem;
+      overflow: hidden;
+      transition: all 0.35s ease;
+      box-shadow: 0 8px 18px -6px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(0, 0, 0, 0.02);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    .library-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 22px 32px -12px rgba(0, 0, 0, 0.12), 0 0 0 1px #e0e7ff;
+    }
+    .card-badge {
+      position: absolute;
+      top: 0.8rem;
+      right: 0.8rem;
+      background: rgba(15,23,42,0.8);
+      backdrop-filter: blur(8px);
+      color: white;
+      font-size: 0.65rem;
+      font-weight: 600;
+      padding: 0.2rem 0.7rem;
+      border-radius: 2rem;
+      letter-spacing: 0.3px;
+      z-index: 2;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    .card-icon {
+      background: linear-gradient(145deg, #f1f5f9, #eef2ff);
+      padding: 1.2rem 1.2rem 0.4rem 1.2rem;
+      font-size: 2.4rem;
+      color: #4f46e5;
+    }
+    .card-content {
+      padding: 1.2rem 1.2rem 1.2rem 1.2rem;
+      flex: 1;
+    }
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: #0f172a;
+      line-height: 1.3;
+    }
+    .card-description {
+      font-size: 0.85rem;
+      color: #334155;
+      line-height: 1.5;
+      margin-bottom: 1rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .card-meta {
+      display: flex;
+      gap: 1rem;
+      font-size: 0.7rem;
+      color: #6c6f78;
+      margin-bottom: 1rem;
+      border-top: 1px solid #edf2f7;
+      padding-top: 0.7rem;
+    }
+    .card-meta i {
+      margin-right: 0.3rem;
+      width: 1rem;
+    }
+    .card-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: linear-gradient(95deg, #4f46e5, #7c3aed);
+      padding: 0.5rem 1.1rem;
+      border-radius: 2rem;
+      color: white;
+      font-weight: 600;
+      font-size: 0.75rem;
+      text-decoration: none;
+      transition: all 0.2s;
+      box-shadow: 0 2px 5px rgba(79,70,229,0.3);
+    }
+    .card-link:hover {
+      background: #4f46e5;
+      gap: 0.7rem;
+      transform: scale(0.98);
+      box-shadow: 0 4px 10px rgba(79,70,229,0.4);
+    }
+
+    /* Pagination modern */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+      padding: 0.8rem 0;
+    }
+    .pagination a, .pagination span {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 2.3rem;
+      height: 2.3rem;
+      padding: 0 0.7rem;
+      border-radius: 1rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+      background: white;
+      color: #1e293b;
+      border: 1px solid #e2e8f0;
+    }
+    .pagination a:hover {
+      background: #4f46e5;
+      color: white;
+      border-color: #4f46e5;
+      transform: translateY(-2px);
+    }
+    .pagination .current {
+      background: linear-gradient(135deg, #4f46e5, #8b5cf6);
+      color: white;
+      border: none;
+      box-shadow: 0 4px 10px -6px #4f46e5;
+    }
+    .empty-state {
+      text-align: center;
+      padding: 3rem 2rem;
+      background: white;
+      border-radius: 2rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+      border: 1px solid #eef2ff;
+    }
+    .empty-state-icon {
+      font-size: 3.5rem;
+      margin-bottom: 0.8rem;
+    }
+
+    /* ========== RESPONSIVE MASTER ========== */
+    @media (max-width: 768px) {
+      .resources-container {
+        padding: 0 1rem 2rem;
+      }
+      /* Hero section: extra compact on mobile */
+      .resources-header {
+        padding: 0.9rem 1rem;
+        margin-bottom: 1.2rem;
+        border-radius: 1.2rem;
+      }
+      .resources-header h1 {
+        font-size: 1.6rem;
+      }
+      .resources-header h1 i {
+        font-size: 1.4rem;
+      }
+      .resources-header p {
+        font-size: 0.8rem;
+      }
+      .library-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.2rem;
+      }
+      .card-title {
+        font-size: 1.15rem;
+      }
+      .search-input {
+        padding: 0.75rem 2.5rem 0.75rem 1.2rem;
+        font-size: 0.9rem;
+      }
+      .search-clear {
+        right: 2.8rem;
+      }
+    }
+    @media (max-width: 480px) {
+      .resources-header h1 {
+        font-size: 1.35rem;
+      }
+      .library-grid {
+        grid-template-columns: 1fr;
+      }
+      .results-info {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+      }
+      .pagination a, .pagination span {
+        min-width: 1.9rem;
+        height: 1.9rem;
+        font-size: 0.7rem;
+      }
+      .resources-header {
+        padding: 0.8rem 0.8rem;
+      }
+    }
+    /* fadeIn keyframes */
+    @keyframes fadeInUpCard {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .library-card {
+      opacity: 0;
+      transform: translateY(15px);
+      animation: fadeInUpCard 0.45s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Include Navbar (assuming dynamic) -->
+{% include 'partial/navbar.html' %}
+
+<main>
+  <div class="resources-container" id="mainResourcesContainer">
+    <!-- HERO SECTION - REDUCED SIZE, COMPACT DESIGN, NO EXTRA MARGIN/TOP SPACE -->
+    <div class="resources-header">
+      <h1>
+        <i class="fas fa-book-open"></i> 
+        মিডিয়া ঘর লাইব্রেরি
+      </h1>
+      <p>পাইথন, জ্যাঙ্গো, ওয়েব ডেভেলপমেন্ট, ডাটাবেস ও ফ্রিল্যান্সিং — প্রিমিয়াম টিউটোরিয়াল, ই-বুক, চিটশিট এবং প্রোজেক্ট আইডিয়াস। বাংলায় সর্ববৃহৎ রিসোর্স সংগ্রহ।</p>
+      <div style="margin-top: 0.6rem;">
+        <span style="background: rgba(255,255,255,0.15); padding: 0.2rem 0.8rem; border-radius: 2rem; font-size: 0.7rem;"><i class="fas fa-sync-alt"></i> নিয়মিত আপডেট</span>
+        <span style="background: rgba(255,255,255,0.15); padding: 0.2rem 0.8rem; border-radius: 2rem; font-size: 0.7rem; margin-left: 0.4rem;"><i class="fas fa-users"></i> ১০,০০০+ শিক্ষার্থী</span>
+      </div>
+    </div>
+
+    <!-- Search Section with Micro-interactions -->
+    <div class="search-section">
+      <div class="search-box">
+        <form method="GET" action="" id="searchForm">
+          <input 
+            type="text" 
+            name="search" 
+            id="searchInput"
+            class="search-input" 
+            placeholder="🔍  অনুসন্ধান করুন (টাইটেল, বিবরণ বা ট্যাগ)..."
+            value="{{ search_query }}"
+            autocomplete="off"
+          >
+          <i class="fas fa-search search-icon"></i>
+          <span class="search-clear" id="clearSearch">
+            <i class="fas fa-times-circle"></i>
+          </span>
+        </form>
+      </div>
+    </div>
+
+    <!-- Results Info with enhanced design -->
+    <div class="results-info">
+      <div class="results-count">
+        {% if search_query %}
+          <i class="fas fa-filter"></i> 
+          <strong>“{{ search_query }}”</strong> — মিলেছে <strong>{{ paginator.count }}</strong>টি রিসোর্স
+        {% else %}
+          <i class="fas fa-layer-group"></i> 
+          মোট <strong>{{ paginator.count }}</strong>টি হ্যান্ডপিকড রিসোর্স
+        {% endif %}
+      </div>
+      {% if search_query %}
+        <a href="?" class="reset-search" style="text-decoration: none;">
+          <i class="fas fa-eraser"></i> সার্চ রিসেট
+        </a>
+      {% endif %}
+    </div>
+
+    <!-- Library Grid (resources_card.html inclusion) -->
+    {% include "resources_card.html" %}
+
+    <!-- Pagination: elegant + retain search params -->
+    {% if libraries.has_other_pages %}
+      <div class="pagination">
+        {% if libraries.has_previous %}
+          <a href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}"><i class="fas fa-angle-double-left"></i></a>
+          <a href="?page={{ libraries.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}"><i class="fas fa-angle-left"></i></a>
+        {% else %}
+          <span class="disabled"><i class="fas fa-angle-double-left"></i></span>
+          <span class="disabled"><i class="fas fa-angle-left"></i></span>
+        {% endif %}
+
+        {% for num in libraries.paginator.page_range %}
+          {% if libraries.number == num %}
+            <span class="current">{{ num }}</span>
+          {% elif num > libraries.number|add:'-3' and num < libraries.number|add:'3' %}
+            <a href="?page={{ num }}{% if search_query %}&search={{ search_query }}{% endif %}">{{ num }}</a>
+          {% endif %}
+        {% endfor %}
+
+        {% if libraries.has_next %}
+          <a href="?page={{ libraries.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}"><i class="fas fa-angle-right"></i></a>
+          <a href="?page={{ libraries.paginator.num_pages }}{% if search_query %}&search={{ search_query }}{% endif %}"><i class="fas fa-angle-double-right"></i></a>
+        {% else %}
+          <span class="disabled"><i class="fas fa-angle-right"></i></span>
+          <span class="disabled"><i class="fas fa-angle-double-right"></i></span>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+</main>
+
+<!-- Footer -->
+{% include 'partial/footer.html' %}
+
+<script>
+  (function() {
+    // ========== FIX TOP SPACE: ENSURE NO EXTRA MARGIN ON BODY OR CONTAINER ==========
+    // Also adjust container margin based on navbar but now we ensure it's minimal
+    function adjustContainerMargin() {
+      const navbar = document.querySelector('nav'); 
+      const container = document.getElementById('mainResourcesContainer');
+      if (!container) return;
+      
+      let navbarHeight = 0;
+      if (navbar) {
+        navbarHeight = navbar.offsetHeight;
+        if (navbarHeight === 0 && navbar.getBoundingClientRect().height) {
+          navbarHeight = navbar.getBoundingClientRect().height;
+        }
+      } else {
+        const altNav = document.querySelector('.navbar, header, .main-nav');
+        if (altNav) navbarHeight = altNav.offsetHeight;
+      }
+      // Critical: set margin-top to only navbar height, no extra spacing.
+      // Adding just 0px to avoid any gap, but sometimes navbar is sticky, we set accordingly
+      const desiredTop = navbarHeight > 0 ? navbarHeight : 0;
+      container.style.marginTop = desiredTop + 'px';
+    }
+
+    window.addEventListener('load', function() {
+      adjustContainerMargin();
+      setTimeout(adjustContainerMargin, 60);
+    });
+    window.addEventListener('resize', adjustContainerMargin);
+    
+    // ========== SEARCH LOGIC (debounce + URL + clear) ==========
+    const searchInput = document.getElementById('searchInput');
+    const searchForm = document.getElementById('searchForm');
+    const clearBtn = document.getElementById('clearSearch');
+    let searchDebounceTimer;
+    
+    function submitSearchWithResetPage() {
+      if (!searchForm) return;
+      let currentValue = searchInput ? searchInput.value.trim() : '';
+      const url = new URL(window.location.href);
+      if (currentValue) {
+        url.searchParams.set('search', currentValue);
+        url.searchParams.delete('page');
+      } else {
+        url.searchParams.delete('search');
+        url.searchParams.delete('page');
+      }
+      window.history.pushState({}, '', url);
+      searchForm.submit();
+    }
+    
+    if (searchInput) {
+      searchInput.addEventListener('input', function(e) {
+        if (clearBtn) {
+          clearBtn.style.display = this.value.length > 0 ? 'flex' : 'none';
+        }
+        clearTimeout(searchDebounceTimer);
+        searchDebounceTimer = setTimeout(() => {
+          submitSearchWithResetPage();
+        }, 450);
+      });
+    }
+    
+    if (clearBtn) {
+      clearBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        if (searchInput) {
+          searchInput.value = '';
+          clearBtn.style.display = 'none';
+          submitSearchWithResetPage();
+        }
+      });
+    }
+    
+    if (searchForm) {
+      searchForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        submitSearchWithResetPage();
+      });
+    }
+    
+    // initial clear visibility
+    if (searchInput && clearBtn) {
+      clearBtn.style.display = searchInput.value.length > 0 ? 'flex' : 'none';
+    }
+    
+    // handle back/forward
+    window.addEventListener('popstate', function() {
+      const params = new URLSearchParams(window.location.search);
+      const searchVal = params.get('search') || '';
+      if (searchInput) {
+        searchInput.value = searchVal;
+        if (clearBtn) clearBtn.style.display = searchVal ? 'flex' : 'none';
+      }
+    });
+    
+    // ========== CARD ANIMATIONS DELAY ==========
+    const cards = document.querySelectorAll('.library-card');
+    cards.forEach((card, idx) => {
+      card.style.animationDelay = `${idx * 0.02}s`;
+    });
+  })();
+</script>
+
+<!-- Additional SEO + professional schema -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "Media Ghor Library - Python, Django & Web Development Resources",
+  "description": "বাংলায় পাইথন, জ্যাঙ্গো, ওয়েব ডেভেলপমেন্ট, ডাটাবেস এবং ফ্রিল্যান্সিং বিষয়ক হাজারো রিসোর্স। টিউটোরিয়াল, প্রক্টিক্যাল প্রোজেক্ট, গাইডলাইন।",
+  "url": "{{ request.build_absolute_uri }}",
+  "provider": {
+    "@type": "Organization",
+    "name": "Media Ghor",
+    "url": "https://mediaghor.com"
+  }
+}
+</script>
+</body>
+</html>
